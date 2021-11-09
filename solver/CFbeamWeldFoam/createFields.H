@@ -668,10 +668,12 @@ PtrList<volScalarField> Sum_parts(N_Ori);
                 name_ni,
                 runTime.timeName(),
                 mesh,
-                IOobject::MUST_READ,
+                IOobject::READ_IF_PRESENT,//IOobject::MUST_READ,
                 IOobject::AUTO_WRITE
             ),
-            mesh
+            mesh,
+	    dimensionedScalar("ni",dimensionSet(0, 0, 0, 0, 0),0.0),
+	    zeroGradientFvPatchScalarField::typeName
         )
     );
 }
@@ -688,7 +690,9 @@ PtrList<volScalarField> Sum_parts(N_Ori);
             IOobject::MUST_READ,
             IOobject::AUTO_WRITE
         ),
-        mesh
+        mesh,
+	    dimensionedScalar("xi",dimensionSet(0, 0, 0, 0, 0),0.0),
+	    zeroGradientFvPatchScalarField::typeName
     );
 
 

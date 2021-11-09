@@ -18,6 +18,7 @@ FoamFile
 defaultFieldValues
 (
     volScalarFieldValue alpha.phase1 0
+volScalarFieldValue xi 0.0
 );
 
 regions
@@ -31,76 +32,9 @@ regions
         fieldValues
         (
     volScalarFieldValue alpha.phase1 1
-volScalarFieldValue xi 0.0
+volScalarFieldValue xi 1.0
         );
     }
-
-
-
-cylinderToCell
-{
-p1 	 (-1 	 20e-6	 0e-6);
-p2 	 (51 	 20e-6 	 0e-6);
-radius 5e-6;
-fieldValues
-(
-            volScalarFieldValue n.0 1.0
-	    volScalarFieldValue xi 1.0
-	    volScalarFieldValue Temperature 940
-);
-}
-
-cylinderToCell
-{
-p1 	 (-1 	 30e-6	 0e-6);
-p2 	 (51 	 30e-6 	 0e-6);
-radius 2e-6;
-fieldValues
-(
-            volScalarFieldValue n.1 1.0
-	    volScalarFieldValue xi 1.0
-volScalarFieldValue Temperature 940
-);
-}
-
-cylinderToCell
-{
-p1 	 (-1 	 20e-6	 100e-6);
-p2 	 (51 	 20e-6 	 100e-6);
-radius 8e-6;
-fieldValues
-(
-            volScalarFieldValue n.2 1.0
-	    volScalarFieldValue xi 1.0
-volScalarFieldValue Temperature 940
-);
-}
-
-cylinderToCell
-{
-p1 	 (-1 	 50e-6	 100e-6);
-p2 	 (51 	 50e-6 	 100e-6);
-radius 5e-6;
-fieldValues
-(
-            volScalarFieldValue n.3 1.0
-	    volScalarFieldValue xi 1.0
-volScalarFieldValue Temperature 940
-);
-}
-
-cylinderToCell
-{
-p1 	 (-1 	 70e-6	 0e-6);
-p2 	 (51 	 70e-6 	 0e-6);
-radius 10e-6;
-fieldValues
-(
-            volScalarFieldValue n.4 1.0
-	    volScalarFieldValue xi 1.0
-volScalarFieldValue Temperature 940
-);
-}
 
 
 

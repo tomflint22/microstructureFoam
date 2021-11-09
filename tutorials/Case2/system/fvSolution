@@ -175,10 +175,10 @@ MELTING
     epsilonRelaxation 0.95;
     
 //	//	Heatsource characteristics
-HS_a 0.002;
+HS_a 1e-4;
 HS_bg 0.0;//20
 HS_velocity 0.0;//6.0;
-HS_lg 0.0;
+HS_lg 50.0e-6;
 HS_Q 0.0;//
 
 HS_deposition_cutoff 0.5;
