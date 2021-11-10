@@ -1,22 +1,59 @@
 {
 
+/*
+dimensionedScalar Kg("Kg", dimensionSet(0, 2, -1, 0, 0), readScalar(PhaseFieldProperties.lookup("Kg")));
+dimensionedScalar gamma_pf("gamma_pf", dimensionSet(0, 0, 0, 0, 0), readScalar(PhaseFieldProperties.lookup("gamma_pf")));
+dimensionedScalar m_g("m_g", dimensionSet(0, 0, -1, 0, 0), readScalar(PhaseFieldProperties.lookup("m_g")));
+dimensionedScalar Lg("Lg", dimensionSet(0, 0, 0, 0, 0), readScalar(PhaseFieldProperties.lookup("Lg")));
 
-dimensionedScalar Kg("Kg", dimensionSet(0, 2, -1, 0, 0), /*1.0e-6*/readScalar(PhaseFieldProperties.lookup("Kg")));
-dimensionedScalar gamma_pf("gamma_pf", dimensionSet(0, 0, 0, 0, 0), /*1.5*/readScalar(PhaseFieldProperties.lookup("gamma_pf")));
-dimensionedScalar m_g("m_g", dimensionSet(0, 0, -1, 0, 0), /*4500*/readScalar(PhaseFieldProperties.lookup("m_g")));
-dimensionedScalar Lg("Lg", dimensionSet(0, 0, 0, 0, 0), /*1.2*/readScalar(PhaseFieldProperties.lookup("Lg")));
-
-dimensionedScalar m_p("m_p", dimensionSet(0, 0, -1, 0, 0), /*4500.0*/readScalar(PhaseFieldProperties.lookup("m_p")));
-dimensionedScalar Lp("Lp", dimensionSet(0, 0, 0, 0, 0), /*1.2*/readScalar(PhaseFieldProperties.lookup("Lp")));
-dimensionedScalar Kp("Kp", dimensionSet(0, 2, -1, 0, 0), /*1.0e-6*/readScalar(PhaseFieldProperties.lookup("Kp")));
-
-
-
+dimensionedScalar m_p("m_p", dimensionSet(0, 0, -1, 0, 0), readScalar(PhaseFieldProperties.lookup("m_p")));
+dimensionedScalar Lp("Lp", dimensionSet(0, 0, 0, 0, 0), readScalar(PhaseFieldProperties.lookup("Lp")));
+dimensionedScalar Kp("Kp", dimensionSet(0, 2, -1, 0, 0), readScalar(PhaseFieldProperties.lookup("Kp")));
+*/
 
 
+dimensionedScalar gamma_pf("gamma_pf", dimensionSet(0, 0, 0, 0, 0), readScalar(PhaseFieldProperties.lookup("gamma_pf")));
+
+dimensionedScalar sigma_P("sigma_P", dimensionSet(1, 0, -2, 0, 0),readScalar(PhaseFieldProperties.lookup("sigma_P")));
+dimensionedScalar sigma_G("sigma_G", dimensionSet(1, 0, -2, 0, 0),readScalar(PhaseFieldProperties.lookup("sigma_G")));
+dimensionedScalar lp("lp", dimensionSet(0, 1, 0, 0, 0),readScalar(PhaseFieldProperties.lookup("lp")));
+dimensionedScalar lg("lg", dimensionSet(0, 1, 0, 0, 0),readScalar(PhaseFieldProperties.lookup("lg")));
+
+dimensionedScalar deltaf_g("deltaf_g", dimensionSet(0, 0, 0, 0, 0),readScalar(PhaseFieldProperties.lookup("deltaf_g")));
+dimensionedScalar deltaf_p("deltaf_p", dimensionSet(0, 0, 0, 0, 0),readScalar(PhaseFieldProperties.lookup("deltaf_p")));
+
+// dimensionedScalar D0("D0", dimensionSet(-1, 2, 1, 0, 0),readScalar(PhaseFieldProperties.lookup("D0")));
+// dimensionedScalar Qg("Qg", dimensionSet(1, 2, -2, 0, 0),readScalar(PhaseFieldProperties.lookup("Qg")));
+
+
+dimensionedScalar m_p = (3.0/4.0)*((sigma_P)/(deltaf_p*lp));
+// dimensionedScalar m_p("m_p", dimensionSet(0, 0, -1, 0, 0), (3.0/4.0)*((sigma_P.value())/(deltaf_p.value()*lp.value())));
+
+dimensionedScalar m_g= (3.0/4.0)*((sigma_G)/(deltaf_g*lg));
+dimensionedScalar Kg = sigma_G*lg;
+dimensionedScalar Kp = (3.0/4.0)*sigma_P*lp;
+
+dimensionedScalar Lp("Lp", dimensionSet(-1, 1, 1, 0, 0), readScalar(PhaseFieldProperties.lookup("Lp")));
+dimensionedScalar Lg("Lg", dimensionSet(-1, 1, 1, 0, 0), readScalar(PhaseFieldProperties.lookup("Lg")));
+
+Info<<m_p.value()<<endl;
+Info<<m_g.value()<<endl;
+Info<<Kg.value()<<endl;
+Info<<Kp.value()<<endl;
+Info<<Lp.value()<<endl;
+Info<<Lg.value()<<endl;
+// Info<<endl;
+// Info<<gamma_pf.value()<<endl;
+// Info<<sigma_P.value()<<endl;
+// Info<<sigma_G.value()<<endl;
+// Info<<lp.value()<<endl;
+// Info<<lg.value()<<endl;
+// Info<<deltaf_g.value()<<endl;
+// Info<<deltaf_p.value()<<endl;
 
 
 Sum_Phases*=0.0;
+GBs*=0.0;
 
 for(label count = 0; count < N_Ori; count++)
 {
@@ -26,19 +63,29 @@ for(label count = 0; count < N_Ori; count++)
 
 
 volScalarField& ni = PopBal[count];
+
+GBs+=ni*ni;
+
 volScalarField test12 = (ni*ni*ni) - ni + 2.0*ni*(1.0-xi)*(1.0-xi);
 
-    Sum_Phases+=ni;
 
+    Sum_Phases+=ni;
+// volScalarField test12addition = 0.0*ni;//NEED TO SET THIS TO ZERO BETTER
 for(label count2 = 0; count2 < N_Ori; count2++)
 {
+
+
+
 if(count != count2){
 volScalarField& nj = PopBal[count2];
+// test12addition += nj*nj;
 test12+=2.0*gamma_pf*ni*nj*nj;
 }
 
 
+
 }
+// test12+=2.0*gamma_pf*ni*test12addition;
 
 Sum_parts.set(count,new volScalarField(test12));//
         // volScalarField& Su=Sum_parts[count];
@@ -54,7 +101,7 @@ Sum_parts.set(count,new volScalarField(test12));//
 
 
 
-GBs*=0.0;
+
 
 for(label count = 0; count < N_Ori; count++)
 {
@@ -62,7 +109,7 @@ for(label count = 0; count < N_Ori; count++)
     volScalarField& ni = PopBal[count];
     volScalarField& Su=Sum_parts[count];
 
-GBs+=ni*ni;
+
     
 solve
                 (

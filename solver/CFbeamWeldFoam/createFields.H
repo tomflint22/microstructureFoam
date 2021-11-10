@@ -687,14 +687,14 @@ PtrList<volScalarField> Sum_parts(N_Ori);
             "xi",
             runTime.timeName(),
             mesh,
-            IOobject::MUST_READ,
+            IOobject::READ_IF_PRESENT,
             IOobject::AUTO_WRITE
         ),
         mesh,
 	    dimensionedScalar("xi",dimensionSet(0, 0, 0, 0, 0),0.0),
 	    zeroGradientFvPatchScalarField::typeName
     );
-
+// xi.write();
 
         volScalarField phi_PF
     (
