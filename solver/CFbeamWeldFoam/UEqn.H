@@ -3,7 +3,7 @@ MRF.correctBoundaryVelocity(U);
     dimensionedScalar DarcyConstantlarge("DarcyConstantlarge",dimensionSet(1,-3,-1,0,0),scalar(1.0e6));//1e10
     dimensionedScalar DarcyConstantsmall("DarcyConstantsmall",dimensionSet(0,0,0,0,0),scalar(1.0e-12));//1e-6
 
-    dimensionedScalar TSmooth("TSmooth",dimensionSet(0, 0, 0, 1, 0),50.0);
+    
 
     DC=(DarcyConstantlarge*Foam::pow((1.0-epsilon1),2)/(Foam::pow(epsilon1,3)+DarcyConstantsmall));
     DC.correctBoundaryConditions();

@@ -140,20 +140,33 @@ solvers
 
     "n.*"
     {
-
+/*
         solver          smoothSolver;
         smoother        symGaussSeidel;
         tolerance       1e-6;
         relTol          0.0;
+*/
+        solver          PBiCG;
+        preconditioner  DILU;
+        tolerance       1e-6;
+        minIter         1;
+        maxIter         50;//2
 
     }
 
     "(n.*)Final"
     {
+/*
         solver          smoothSolver;
         smoother        symGaussSeidel;
         tolerance       1e-6;
         relTol          0.0;
+*/
+        solver          PBiCG;
+        preconditioner  DILU;
+        tolerance       1e-6;
+        minIter         1;
+        maxIter         50;//2
     }
 
 }
@@ -175,11 +188,11 @@ MELTING
     epsilonRelaxation 0.95;
     
 //	//	Heatsource characteristics
-HS_a 1e-4;
+HS_a 1e-3;
 HS_bg 0.0;//20
 HS_velocity 0.0;//6.0;
-HS_lg 50.0e-6;
-HS_Q 0.0;//
+HS_lg 100.0e-6;
+HS_Q 400.0;//
 
 HS_deposition_cutoff 0.5;
 

@@ -22,8 +22,8 @@ dimensionedScalar lg("lg", dimensionSet(0, 1, 0, 0, 0),readScalar(PhaseFieldProp
 dimensionedScalar deltaf_g("deltaf_g", dimensionSet(0, 0, 0, 0, 0),readScalar(PhaseFieldProperties.lookup("deltaf_g")));
 dimensionedScalar deltaf_p("deltaf_p", dimensionSet(0, 0, 0, 0, 0),readScalar(PhaseFieldProperties.lookup("deltaf_p")));
 
-// dimensionedScalar D0("D0", dimensionSet(-1, 2, 1, 0, 0),readScalar(PhaseFieldProperties.lookup("D0")));
-// dimensionedScalar Qg("Qg", dimensionSet(1, 2, -2, 0, 0),readScalar(PhaseFieldProperties.lookup("Qg")));
+dimensionedScalar D0("D0", dimensionSet(-1, 1, 1, 0, 0),readScalar(PhaseFieldProperties.lookup("D0")));
+dimensionedScalar Qg("Qg", dimensionSet(1, 2, -2, 0, -1),readScalar(PhaseFieldProperties.lookup("Qg")));
 
 
 dimensionedScalar m_p = (3.0/4.0)*((sigma_P)/(deltaf_p*lp));
@@ -33,15 +33,24 @@ dimensionedScalar m_g= (3.0/4.0)*((sigma_G)/(deltaf_g*lg));
 dimensionedScalar Kg = sigma_G*lg;
 dimensionedScalar Kp = (3.0/4.0)*sigma_P*lp;
 
-dimensionedScalar Lp("Lp", dimensionSet(-1, 1, 1, 0, 0), readScalar(PhaseFieldProperties.lookup("Lp")));
-dimensionedScalar Lg("Lg", dimensionSet(-1, 1, 1, 0, 0), readScalar(PhaseFieldProperties.lookup("Lg")));
 
-Info<<m_p.value()<<endl;
-Info<<m_g.value()<<endl;
-Info<<Kg.value()<<endl;
-Info<<Kp.value()<<endl;
-Info<<Lp.value()<<endl;
-Info<<Lg.value()<<endl;
+// dimensionedScalar Lg("Lg", dimensionSet(-1, 1, 1, 0, 0), readScalar(PhaseFieldProperties.lookup("Lg")));
+
+dimensionedScalar gasconstant("gasconstant",dimensionSet(1, 2, -2, -1, -1),scalar(8.314));
+
+// volScalarField 
+Lg = D0*Foam::exp((-Qg)/(gasconstant*Temperature));
+
+// dimensionedScalar Lp("Lp", dimensionSet(-1, 1, 1, 0, 0), readScalar(PhaseFieldProperties.lookup("Lp")));
+
+dimensionedScalar Lp = 0.125*D0*Foam::exp((-Qg)/(gasconstant*Tliquidus1));
+
+// Info<<m_p.value()<<endl;
+// Info<<m_g.value()<<endl;
+// Info<<Kg.value()<<endl;
+// Info<<Kp.value()<<endl;
+// Info<<Lp.value()<<endl;
+// Info<<Lg.value()<<endl;
 // Info<<endl;
 // Info<<gamma_pf.value()<<endl;
 // Info<<sigma_P.value()<<endl;

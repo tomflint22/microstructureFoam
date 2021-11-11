@@ -87,6 +87,7 @@ dimensionedScalar Mm("Mm",dimensionSet(1, 0, 0, 0, -1),transportProperties.looku
 dimensionedScalar LatentHeatVap("LatentHeatVap",dimensionSet(0, 2, -2, 0, 0),transportProperties.lookup("LatentHeatVap"));
 dimensionedScalar R ("R", dimensionSet(1,2,-2,-1,-1,0,0),8.314);
 
+dimensionedScalar TSmooth("TSmooth",dimensionSet(0, 0, 0, 1, 0),50.0);
 
 
 Info<< "Reading field Temperature\n" << endl;
@@ -621,6 +622,23 @@ volScalarField thermalDamper
         ),
         mesh,
         dimensionedScalar("Sum_Phases",dimensionSet(0, 0, 0, 0, 0),0.0)
+    );
+
+
+
+
+        volScalarField Lg
+    (
+        IOobject
+        (
+            "Lg",
+            runTime.timeName(),
+            mesh,
+            IOobject::NO_READ,
+            IOobject::AUTO_WRITE
+        ),
+        mesh,
+        dimensionedScalar("Lg",dimensionSet(-1, 1, 1, 0, 0),0.0)
     );
 
 
