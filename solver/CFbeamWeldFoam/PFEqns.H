@@ -43,7 +43,7 @@ Lg = D0*Foam::exp((-Qg)/(gasconstant*Temperature));
 
 // dimensionedScalar Lp("Lp", dimensionSet(-1, 1, 1, 0, 0), readScalar(PhaseFieldProperties.lookup("Lp")));
 
-dimensionedScalar Lp = 0.125*D0*Foam::exp((-Qg)/(gasconstant*Tliquidus1));
+dimensionedScalar Lp = 1.0*D0*Foam::exp((-Qg)/(gasconstant*Tliquidus1));
 
 // Info<<m_p.value()<<endl;
 // Info<<m_g.value()<<endl;
