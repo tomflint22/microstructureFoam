@@ -69,8 +69,6 @@ for(label count = 0; count < N_Ori; count++)
 
 
 
-
-
 volScalarField& ni = PopBal[count];
 
 GBs+=ni*ni;

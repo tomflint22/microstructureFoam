@@ -698,6 +698,20 @@ PtrList<volScalarField> Sum_parts(N_Ori);
 //Phase Field Stuff for Non-Conserved Parameters
 
 
+
+    forAll( mesh.C(), celli)
+{
+
+if(Temperature[celli]>TLiquidus[celli]){
+
+for(label count = 0; count < N_Ori; count++)
+{
+PopBal[count][celli] = 0.0;
+}
+}
+
+}
+
     volScalarField xi
     (
         IOobject
