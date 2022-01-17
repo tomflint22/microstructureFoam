@@ -53,6 +53,7 @@ Description
 #include "fvcSmooth.H"
 
 #include <vector>
+#include <random>       
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -69,8 +70,11 @@ int main(int argc, char *argv[])
     Info<< "\nFinding Number of Unique X co-ordinates for Ray-Tracing\n" << endl;
     #include "uniqueX.H"
 
-
+    // label nucCount(0);
+    // #include "setNucleationSites.H"
+    // Info << "nucCount: " << nucCount << endl;
     #include "createFields.H"
+
     #include "createAlphaFluxes.H"
     #include "initCorrectPhi.H"
     #include "createUfIfPresent.H"
@@ -165,6 +169,8 @@ int main(int argc, char *argv[])
                 #include "pEqn.H"
             }
 
+            #   include "nucleate.H"
+
 		#include "PFEqns.H"
 
             if (pimple.turbCorr())
@@ -173,6 +179,18 @@ int main(int argc, char *argv[])
             }
 
 
+        }
+
+        // Write active phase field parameters.
+        if(runTime.writeTime()){
+            forAll(ni_active,i){
+                if (ni_active[i])
+                {
+                    PopBal[i].write();
+                }
+            }
+            #   include "populateGrainNum.H"
+            grainNum.write();
         }
 
         runTime.write();

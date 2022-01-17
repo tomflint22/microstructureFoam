@@ -1,3 +1,21 @@
+volScalarField xi
+(
+    IOobject
+    (
+        "xi",
+        runTime.timeName(),
+        mesh,
+        IOobject::READ_IF_PRESENT,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionedScalar("xi",dimensionSet(0, 0, 0, 0, 0),0.0),
+    zeroGradientFvPatchScalarField::typeName
+);
+    
+#   include "setNucleationSites.H"
+
+label N_Ori(nucCount);
 #include "createRDeltaT.H"
 
 dimensionedScalar deltaN=1e-8/pow(average(mesh.V()), 1.0/3.0);
@@ -104,6 +122,7 @@ volScalarField Temperature
     mesh
 );
 
+
 volScalarField TSolidus
 (
     IOobject
@@ -133,6 +152,19 @@ volScalarField TLiquidus
     dimensionedScalar("TLiquidus",dimensionSet(0, 0, 0, 1, 0),1.0)
 );
 TLiquidus=alpha1*Tliquidus1 + alpha2*Tliquidus2;
+
+volScalarField Tu
+(
+    IOobject
+    (
+        "Tu",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    TLiquidus - Temperature
+);
 
 volScalarField DC
 (
@@ -658,18 +690,65 @@ volScalarField thermalDamper
     );
 
 
-label N_Ori(readLabel(PhaseFieldProperties.lookup("N_Phases")));
+// label N_Ori(readLabel(PhaseFieldProperties.lookup("N_Phases")));
+label N_Seeds(readLabel(PhaseFieldProperties.lookup("N_Seeds")));
 
+
+
+//- Get number of phase field order parameters based on N_Seeds and Nsites
+// Info<< "Reading Nucleation Parameters from nucleationDict\n" << endl;
+// IOdictionary nucleationDict
+// (
+//     IOobject
+//     (
+//         "nucleationDict",
+//         runTime.constant(),
+//         mesh,
+//         IOobject::MUST_READ,
+//         IOobject::NO_WRITE
+//     )
+// );
+
+// // Bulk Nucleation Parameters
+// dimensionedScalar Tu_mean
+// (
+//     nucleationDict.lookup("Tu_mean")
+// );
+
+// dimensionedScalar Tu_stdev
+// (
+//     nucleationDict.lookup("Tu_stdev")
+// );
+
+// dimensionedScalar n_max // grains per m3
+// (
+//     nucleationDict.lookup("n_max")
+// );
+
+// // Check if mesh is 2D, if so scale volumetric n_max
+// // 0.7236012546 = sqrt(pi/6)
+// if(mesh.nGeometricD() == 2){
+//   Info << "Mesh is 2D. Converting 3D n_max = " << n_max.value() << " sites/m3 to 2D n_max = ";
+//   n_max.value() = Foam::pow( n_max.value() / 0.7236012546 , (2.0/3.0) ) ;
+//   Info << n_max.value() << " sites/m2" << endl;
+// }
+
+// // Get max number of potential nucleation sites
+// label N_max(gSum(mesh.V())*n_max.value());
+
+
+// label extraNumFields = 50;
+
+
+// label N_Ori(N_Seeds + N_max + extraNumFields);
+// label N_Ori(nucCount);
 Info<<"Number of Phase Field Order Parameters: "<<N_Ori<<endl;
-
-
-
-
-
 
 PtrList<volScalarField> PopBal(N_Ori);
 PtrList<volScalarField> Sum_parts(N_Ori);
 
+// Create list of switches, to turn on and off writing of n fields
+List<Switch> ni_active(N_Ori,false);
 
     for(label count = 0; count < N_Ori; count++)
 {
@@ -687,7 +766,7 @@ PtrList<volScalarField> Sum_parts(N_Ori);
                 runTime.timeName(),
                 mesh,
                 IOobject::READ_IF_PRESENT,//IOobject::MUST_READ,
-                IOobject::AUTO_WRITE
+                IOobject::NO_WRITE
             ),
             mesh,
 	    dimensionedScalar("ni",dimensionSet(0, 0, 0, 0, 0),0.0),
@@ -695,37 +774,51 @@ PtrList<volScalarField> Sum_parts(N_Ori);
         )
     );
 }
+
+
+label maxNiIndex(-1);
+
 //Phase Field Stuff for Non-Conserved Parameters
+forAll(PopBal,i){
+    scalar maxVal = gMax(PopBal[i]);
+    Info << "PopBal[" <<i << "} max = " << maxVal << endl;
+    if (maxVal > SMALL){ // field is non-zero
+        ni_active[i] == true; // turn on writing of field
+        if (i > maxNiIndex)
+        {
+            maxNiIndex = i;
+        }
+    }
+}
+
+Info << "\nmaxNiIndex: " << maxNiIndex << nl << endl; 
 
 
-
-    forAll( mesh.C(), celli)
+forAll( mesh.C(), celli)
 {
+    if(Temperature[celli]>TLiquidus[celli]){
 
-if(Temperature[celli]>TLiquidus[celli]){
-
-for(label count = 0; count < N_Ori; count++)
-{
-PopBal[count][celli] = 0.0;
-}
-}
-
+        for(label count = 0; count < N_Ori; count++)
+        {
+            PopBal[count][celli] = 0.0;
+        }
+    }
 }
 
-    volScalarField xi
-    (
-        IOobject
-        (
-            "xi",
-            runTime.timeName(),
-            mesh,
-            IOobject::READ_IF_PRESENT,
-            IOobject::AUTO_WRITE
-        ),
-        mesh,
-	    dimensionedScalar("xi",dimensionSet(0, 0, 0, 0, 0),0.0),
-	    zeroGradientFvPatchScalarField::typeName
-    );
+    // volScalarField xi
+    // (
+    //     IOobject
+    //     (
+    //         "xi",
+    //         runTime.timeName(),
+    //         mesh,
+    //         IOobject::READ_IF_PRESENT,
+    //         IOobject::AUTO_WRITE
+    //     ),
+    //     mesh,
+	   //  dimensionedScalar("xi",dimensionSet(0, 0, 0, 0, 0),0.0),
+	   //  zeroGradientFvPatchScalarField::typeName
+    // );
 // xi.write();
 
         volScalarField phi_PF
