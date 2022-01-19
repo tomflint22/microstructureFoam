@@ -64,7 +64,7 @@ Info << "Total mesh volume: " << meshVolume
 // Case 1: set point sites with a Gaussian distribution of nucleation undercoolings
 
 
-int randSeedOffset = 0;
+// int randSeedOffset = 0;
 
 
 Info<< "Creating nucleation undercooling field (TuNuc)" << endl;
@@ -110,10 +110,11 @@ DynamicList<bool> nucActive (0);
 DynamicList<scalar> nucTu(0);
 
 
+label ni_fieldsNeeded(0);
+label numNucSitesSet(0);
 
-
-int nucCount = 0;
-int numNucSitesSet(0);
+// Read threshold value for xi, above which no nucleation sites should be set.
+scalar xiThreshold(readScalar(nucleationDict.lookup("xiThreshold")));
 
 // Info << "pSite: " << pSite << "\tN_max: " << N_max << "nCell: " << mesh.nCells() 
 // << "\tN_max/nCells" << N_max/mesh.nCells() << endl;
@@ -124,7 +125,7 @@ forAll(TuNuc, i){
 
     if (
             (rand0to1 < pSite)
-        &&  (xi[i] < SMALL) // Not already solid.
+        &&  (xi[i] < xiThreshold) // Not already solid.
         )
     {
         scalar GaussZ = Tu_normal(generator);
@@ -145,7 +146,7 @@ forAll(TuNuc, i){
         nucActive.append( true ); // Hasn't been nucleated yet, so it is active
         nucTu.append( GaussTu );
 
-        nucCount++;
+        ni_fieldsNeeded++;
         numNucSitesSet++;
         // // nucCells[nucCount] = i;
         // nucRadius[nucCount] = nucCount * 1e-6; // Need to change this
@@ -167,4 +168,6 @@ forAll(nucCells, i){
     Info << "Site " << i << "\tCell:" << nucCells[i] <<"\tactive: " << nucActive[i] << "\tTu: " << TuNuc[nucCells[i]] << endl;
 }
 Info << "\n\n";
+
+TuNuc.write();
 // abort();

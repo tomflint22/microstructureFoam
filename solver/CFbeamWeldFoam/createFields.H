@@ -12,10 +12,10 @@ volScalarField xi
     dimensionedScalar("xi",dimensionSet(0, 0, 0, 0, 0),0.0),
     zeroGradientFvPatchScalarField::typeName
 );
-    
+
 #   include "setNucleationSites.H"
 
-label N_Ori(nucCount);
+// label N_Ori(nucCount);
 #include "createRDeltaT.H"
 
 dimensionedScalar deltaN=1e-8/pow(average(mesh.V()), 1.0/3.0);
@@ -629,119 +629,122 @@ volScalarField thermalDamper
 );
 
 
-    volScalarField GBs
+volScalarField GBs
+(
+    IOobject
     (
-        IOobject
-        (
-            "GBs",
-            runTime.timeName(),
-            mesh,
-            IOobject::NO_READ,
-            IOobject::AUTO_WRITE
-        ),
+        "GBs",
+        runTime.timeName(),
         mesh,
-        dimensionedScalar("GBs",dimensionSet(0, 0, 0, 0, 0),0.0)
-    );
-        volScalarField Sum_Phases
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionedScalar("GBs",dimensionSet(0, 0, 0, 0, 0),0.0)
+);
+
+volScalarField Sum_Phases
+(
+    IOobject
     (
-        IOobject
-        (
-            "Sum_Phases",
-            runTime.timeName(),
-            mesh,
-            IOobject::NO_READ,
-            IOobject::AUTO_WRITE
-        ),
+        "Sum_Phases",
+        runTime.timeName(),
         mesh,
-        dimensionedScalar("Sum_Phases",dimensionSet(0, 0, 0, 0, 0),0.0)
-    );
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionedScalar("Sum_Phases",dimensionSet(0, 0, 0, 0, 0),0.0)
+);
 
-
-
-
-        volScalarField Lg
+volScalarField Lg
+(
+    IOobject
     (
-        IOobject
-        (
-            "Lg",
-            runTime.timeName(),
-            mesh,
-            IOobject::NO_READ,
-            IOobject::AUTO_WRITE
-        ),
+        "Lg",
+        runTime.timeName(),
         mesh,
-        dimensionedScalar("Lg",dimensionSet(-1, 1, 1, 0, 0),0.0)
-    );
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionedScalar("Lg",dimensionSet(-1, 1, 1, 0, 0),0.0)
+);
 
-
-
-
-
-    IOdictionary PhaseFieldProperties
+IOdictionary PhaseFieldProperties
+(
+    IOobject
     (
-        IOobject
-        (
-            "PhaseFieldProperties",    // dictionary name
-            runTime.constant(),     // dict is found in "constant"
-            mesh,                   // registry for the dict
-            IOobject::MUST_READ,    // must exist, otherwise failure
-            IOobject::NO_WRITE      // dict is only read by the solver
-        )
-    );
+        "PhaseFieldProperties",    // dictionary name
+        runTime.constant(),     // dict is found in "constant"
+        mesh,                   // registry for the dict
+        IOobject::MUST_READ,    // must exist, otherwise failure
+        IOobject::NO_WRITE      // dict is only read by the solver
+    )
+);
 
+//----------- SET UP PHASE FIELD PARAMETER FIELDS -------------//
+// Need to first check how many grains exist, if tesselation is used
+// to set initial grain structure.
 
-// label N_Ori(readLabel(PhaseFieldProperties.lookup("N_Phases")));
+label N_Ori(ni_fieldsNeeded); // No. fields needed for nucleation sites
+
+// Read number of seeds set for tesselation
 label N_Seeds(readLabel(PhaseFieldProperties.lookup("N_Seeds")));
 
 
+// Check if last seeded field exists
+word lastSeededFieldName("n." + name(N_Seeds-1)); // -1 as seeds start at 0
+volScalarField tempNi
+(
+    IOobject
+    (
+        lastSeededFieldName,
+        runTime.timeName(),
+        mesh,
+        IOobject::READ_IF_PRESENT,
+        IOobject::NO_WRITE
+    ),
+    mesh,
+    -1.0 // dummy value, if field isn't read
+);
 
-//- Get number of phase field order parameters based on N_Seeds and Nsites
-// Info<< "Reading Nucleation Parameters from nucleationDict\n" << endl;
-// IOdictionary nucleationDict
-// (
-//     IOobject
-//     (
-//         "nucleationDict",
-//         runTime.constant(),
-//         mesh,
-//         IOobject::MUST_READ,
-//         IOobject::NO_WRITE
-//     )
-// );
-
-// // Bulk Nucleation Parameters
-// dimensionedScalar Tu_mean
-// (
-//     nucleationDict.lookup("Tu_mean")
-// );
-
-// dimensionedScalar Tu_stdev
-// (
-//     nucleationDict.lookup("Tu_stdev")
-// );
-
-// dimensionedScalar n_max // grains per m3
-// (
-//     nucleationDict.lookup("n_max")
-// );
-
-// // Check if mesh is 2D, if so scale volumetric n_max
-// // 0.7236012546 = sqrt(pi/6)
-// if(mesh.nGeometricD() == 2){
-//   Info << "Mesh is 2D. Converting 3D n_max = " << n_max.value() << " sites/m3 to 2D n_max = ";
-//   n_max.value() = Foam::pow( n_max.value() / 0.7236012546 , (2.0/3.0) ) ;
-//   Info << n_max.value() << " sites/m2" << endl;
-// }
-
-// // Get max number of potential nucleation sites
-// label N_max(gSum(mesh.V())*n_max.value());
+if (gMax(tempNi) > 0) // Field exists, and has a grain in it
+{
+    // Assume the lower fields are needed also.
+    N_Ori += N_Seeds;
+}
 
 
-// label extraNumFields = 50;
+// Create / read grainNum field. Reading if present, so that simulation
+// can be restarted.
+volScalarField grainNum
+(
+    IOobject
+    (
+        "grainNum",
+        runTime.timeName(),
+        mesh,
+        IOobject::READ_IF_PRESENT,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    -1.0 // No grains is -1
+);
 
+// Getting the maximum value of this field (if it was read) will give
+// the number of grains present
+label numGrainsInitial(gMax(grainNum)+1); // +1 as grains start at n.0
 
-// label N_Ori(N_Seeds + N_max + extraNumFields);
-// label N_Ori(nucCount);
+if (numGrainsInitial > 0) // If grains are present
+{
+    // Ignore seeded tesselation as this should be accounted for in grainNum
+    // Num fields needed = nSites + number of grains already present
+    // ni_fieldsNeeded are the nSites set. No sites are set in already solid domain.
+    N_Ori = ni_fieldsNeeded + numGrainsInitial; 
+
+}
+
 Info<<"Number of Phase Field Order Parameters: "<<N_Ori<<endl;
 
 PtrList<volScalarField> PopBal(N_Ori);
@@ -783,7 +786,7 @@ forAll(PopBal,i){
     scalar maxVal = gMax(PopBal[i]);
     Info << "PopBal[" <<i << "} max = " << maxVal << endl;
     if (maxVal > SMALL){ // field is non-zero
-        ni_active[i] == true; // turn on writing of field
+        ni_active[i] = true; // turn on writing of field
         if (i > maxNiIndex)
         {
             maxNiIndex = i;
