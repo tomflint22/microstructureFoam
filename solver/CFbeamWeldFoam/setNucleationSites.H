@@ -34,7 +34,7 @@ if(mesh.nGeometricD() == 2){
     Info << n_max.value() << " sites/m2" << endl;
 }
 
-Info << "Setting nucleation sites with temperatures based on Gaussian distribution" << endl;
+Info << "Setting nucleation sites with activation undercoolings based on Gaussian distribution" << endl;
 
 // BULK NUCLEATION
 // n_max is the maximum density of nucleation sites possible.
@@ -43,8 +43,11 @@ scalar meshVolume = gSum(mesh.V());
 // Total possible number of nuc sites is meshVolume * n_max
 scalar N_max ( /*(int )*/ n_max.value() * meshVolume);
 
+label totalCellsGlobal(mesh.nCells());
+reduce(totalCellsGlobal,sumOp<label>());
+
 // Proportion of sites that can nucleate
-scalar pSite = scalar(N_max) / scalar(mesh.nCells());
+scalar pSite = scalar(N_max) / totalCellsGlobal;
 
 
 Info << "Total mesh volume: " << meshVolume 
@@ -66,28 +69,12 @@ Info << "Total mesh volume: " << meshVolume
 
 // int randSeedOffset = 0;
 
-
-Info<< "Creating nucleation undercooling field (TuNuc)" << endl;
-volScalarField TuNuc
-(
-    IOobject
-    (
-        "TuNuc",
-        runTime.timeName(),
-        mesh,
-        IOobject::NO_READ,
-        IOobject::AUTO_WRITE // Could be manually written instead
-    ),
-    mesh,
-    dimensionedScalar("TuNuc",dimensionSet(0, 0, 0, 1, 0),-100.0) // -100 is a dummy value
-);
-
 // Uniform distribution - for selection of nucleation sites
 std::random_device rd;  // Will be used to obtain a seed for the random number engine
 std::mt19937 gen(rd()); // Standard mersenne_twister_engine seeded with rd()
 std::uniform_real_distribution<> rand01(0.0, 1.0);
 
-// Gaussian distribution - for assignment of TuNuc
+// Gaussian distribution - for assignment of nucTu
 std::default_random_engine generator;
 std::normal_distribution<double> Tu_normal(Tu_mean.value(),Tu_stdev.value());
 
@@ -104,14 +91,59 @@ List<bool> nucActive (listSize, false);
 List<scalar> nucTu (listSize,scalar(-100));
 */
 
-//- Using dynamic lists instead
-DynamicList<label> nucCells (0);
-DynamicList<bool> nucActive (0);
-DynamicList<scalar> nucTu(0);
+// //- Using dynamic lists instead
+// DynamicList<label> nucCells (0);
+// DynamicList<bool> nucActive (0);
+// DynamicList<scalar> nucTu(0);
+
+//- Use volScalarFields for all each nucleation variable. 
+// It was be a very sparse field, but it's the easiest way to split it up over MPI
+
+Info<< "Creating nucleation undercooling field (nucTu)" << endl;
+volScalarField nucTu
+(
+    IOobject
+    (
+        "nucTu",
+        runTime.timeName(),
+        mesh,
+        IOobject::READ_IF_PRESENT,
+        IOobject::AUTO_WRITE // Could be manually written instead
+    ),
+    mesh,
+    dimensionedScalar("nucTu",dimensionSet(0, 0, 0, 1, 0),-100.0) // -100 is a dummy value
+);
 
 
+Info << "Marking nucleation sites (nucSite):\t"
+    << "-1 = Not a site\t"
+    << "0 = Site that is NOT active\t"
+    << "1 = Sit that IS active."
+    << endl;
+
+volScalarField nucSite
+(
+    IOobject
+    (
+        "nucSite",
+        runTime.timeName(),
+        mesh,
+        IOobject::READ_IF_PRESENT,
+        IOobject::AUTO_WRITE // Could be manually written instead
+    ),
+    mesh,
+    dimensionedScalar("nucSite",dimensionSet(0, 0, 0, 1, 0),-1)
+);
+
+
+//- Create counters for number of fields needed
+Info << "Creating counters for number of fields needed" << endl;
 label ni_fieldsNeeded(0);
 label numNucSitesSet(0);
+// These will be different counters for each processor.
+// Need to sum them from all processors on the master processor,
+// Then broadcast it back out, so that each processor is using the
+// same number of phase field parameter fields.
 
 // Read threshold value for xi, above which no nucleation sites should be set.
 scalar xiThreshold(readScalar(nucleationDict.lookup("xiThreshold")));
@@ -120,7 +152,7 @@ scalar xiThreshold(readScalar(nucleationDict.lookup("xiThreshold")));
 // << "\tN_max/nCells" << N_max/mesh.nCells() << endl;
 // abort();
 
-forAll(TuNuc, i){
+forAll(nucTu, i){
     const scalar rand0to1 = rand01(gen);
 
     if (
@@ -136,15 +168,19 @@ forAll(TuNuc, i){
             GaussTu = 0;
         }
 
-        TuNuc[i] = GaussTu;
         // nucCells[nucCount] = label(i); // Add cell to list of nucleation sites
         // nucActive[nucCount] = true; // Hasn't been nucleated yet, so it is active
         // nucTu[nucCount] =GaussTu;
         
+        //- Dynamic lists
+        // nucCells.append( label(i) ); // Add cell to list of nucleation sites
+        // nucActive.append( true ); // Hasn't been nucleated yet, so it is active
+        // nucTu.append( GaussTu );
 
-        nucCells.append( label(i) ); // Add cell to list of nucleation sites
-        nucActive.append( true ); // Hasn't been nucleated yet, so it is active
-        nucTu.append( GaussTu );
+        //- Sparsely populated volScalarFields
+        // nucCells[i]( label(i) ); // Add cell to list of nucleation sites
+        nucSite[i] = 1.0; // 1 = active nuc site
+        nucTu[i] = GaussTu;
 
         ni_fieldsNeeded++;
         numNucSitesSet++;
@@ -155,19 +191,53 @@ forAll(TuNuc, i){
     }
 }
 
-if (numNucSitesSet == 0)
+// Need to synchronise ni_fieldsNeeded
+int nProcs = Pstream::nProcs();
+int myProc = Pstream::myProcNo();
+
+// Info << "Current processor number: " << myProc << " out of " << nProcs << endl;
+
+Info << "\nCarrying out reduce operation to sum up all number of ni_needed across processors" << endl;
+
+int ni_fieldsNeeded_myProc = ni_fieldsNeeded;
+reduce(ni_fieldsNeeded, sumOp<int>());
+
+
+for(int i = 0; i < nProcs; i++){
+    if (i == myProc)
+    {
+        printf("Proc %d has %d sites and thinks the total is %d\n", myProc, ni_fieldsNeeded_myProc, ni_fieldsNeeded);
+    }
+}
+
+
+Switch checkThatNucSitesExist
+(
+    nucleationDict.lookup("checkThatNucSitesExist")
+);
+
+if (checkThatNucSitesExist)
 {
-    FatalError << "No nucleation sites are set, check nucleation parameters!" << abort(FatalError);
+    if (gMax(nucTu) == 0)
+    {
+        FatalError << "No nucleation sites are set, check nucleation parameters and xiThreshold used in nucleationDict." << nl
+        << "Domain could be already solid, if this is intentional, set checkThatNucSitesExist to false." << abort(FatalError);
+    }
 }
 
 Info << "Number of potential nucleation sites: " << numNucSitesSet << endl;
 
 // Printing nucSite
-Info << "\n--NucSites--  size: " << nucCells.size() << "\tnCells: " << mesh.nCells() << endl;
-forAll(nucCells, i){
-    Info << "Site " << i << "\tCell:" << nucCells[i] <<"\tactive: " << nucActive[i] << "\tTu: " << TuNuc[nucCells[i]] << endl;
-}
-Info << "\n\n";
+// Info << "\n--NucSites--  size: " << numNucSitesSet << "\tnCells: " << mesh.nCells() << endl;
+// int counter = 0;
+// forAll(nucSite, i){
+//     if (nucSite[i] == 1)
+//     {
+//         Info << "Site " << counter << "\tCell:" << i  << "\tActive: " << nucSite[i]  << "\tnucTu: " << nucTu[i] << endl;
+//         counter++;
+//     }
+// }
+// Info << "\n\n";
 
-TuNuc.write();
+nucTu.write();
 // abort();

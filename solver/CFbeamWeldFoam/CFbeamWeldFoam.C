@@ -177,14 +177,12 @@ int main(int argc, char *argv[])
             {
                 turbulence->correct();
             }
-
-
         }
 
         // Write active phase field parameters.
         if(runTime.writeTime()){
-            forAll(ni_active,i){
-                if (ni_active[i])
+            forAll(PopBal,i){
+                if (gMax(PopBal[i]) > xiThreshold)
                 {
                     PopBal[i].write();
                 }

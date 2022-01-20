@@ -747,11 +747,12 @@ if (numGrainsInitial > 0) // If grains are present
 
 Info<<"Number of Phase Field Order Parameters: "<<N_Ori<<endl;
 
+
+reduce(N_Ori,maxOp<label>()); // Make sure all procs have the up to date N_Ori
 PtrList<volScalarField> PopBal(N_Ori);
 PtrList<volScalarField> Sum_parts(N_Ori);
 
-// Create list of switches, to turn on and off writing of n fields
-List<Switch> ni_active(N_Ori,false);
+Info << "After PtrList" << endl;
 
     for(label count = 0; count < N_Ori; count++)
 {
@@ -776,17 +777,18 @@ List<Switch> ni_active(N_Ori,false);
 	    zeroGradientFvPatchScalarField::typeName
         )
     );
+    // Info << "Field " <<name_ni << "is set." << endl;
 }
 
 
+// Get max field number that currently exists.
 label maxNiIndex(-1);
 
-//Phase Field Stuff for Non-Conserved Parameters
 forAll(PopBal,i){
     scalar maxVal = gMax(PopBal[i]);
-    Info << "PopBal[" <<i << "} max = " << maxVal << endl;
+    Info << "PopBal[" <<i << "] max = " << maxVal << endl;
     if (maxVal > SMALL){ // field is non-zero
-        ni_active[i] = true; // turn on writing of field
+        // ni_active[i] = true; // turn on writing of field
         if (i > maxNiIndex)
         {
             maxNiIndex = i;
@@ -794,9 +796,10 @@ forAll(PopBal,i){
     }
 }
 
+
 Info << "\nmaxNiIndex: " << maxNiIndex << nl << endl; 
 
-
+//Phase Field Stuff for Non-Conserved Parameters
 forAll( mesh.C(), celli)
 {
     if(Temperature[celli]>TLiquidus[celli]){
@@ -808,21 +811,8 @@ forAll( mesh.C(), celli)
     }
 }
 
-    // volScalarField xi
-    // (
-    //     IOobject
-    //     (
-    //         "xi",
-    //         runTime.timeName(),
-    //         mesh,
-    //         IOobject::READ_IF_PRESENT,
-    //         IOobject::AUTO_WRITE
-    //     ),
-    //     mesh,
-	   //  dimensionedScalar("xi",dimensionSet(0, 0, 0, 0, 0),0.0),
-	   //  zeroGradientFvPatchScalarField::typeName
-    // );
-// xi.write();
+
+Info << "Phase field parameter fields are set up." << endl;
 
         volScalarField phi_PF
     (
