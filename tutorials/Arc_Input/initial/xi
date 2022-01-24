@@ -10,19 +10,18 @@ FoamFile
     version     2.0;
     format      ascii;
     class       volScalarField;
-    object      p_rgh;
+    object      n.0;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-dimensions      [0 0 0 1 0 0 0];
+dimensions      [0 0 0 0 0 0 0];
 
-internalField   uniform 300.0;
+internalField   uniform 0.0;
 
 boundaryField
 {
 	frontAndBack{
-type fixedValue;
-value uniform 300;
+type zeroGradient;
 	}
 
     lowerWall

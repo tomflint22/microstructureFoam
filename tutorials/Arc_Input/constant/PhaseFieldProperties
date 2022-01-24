@@ -16,7 +16,7 @@ FoamFile
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 
-N_Phases 200;
+N_Phases 101;//N_Phases-N_seeds gives us how many ring-fenced phases we have for nucleation
 
 //Kg	0.225e-6;
 gamma_pf	1.5;
@@ -28,16 +28,16 @@ gamma_pf	1.5;
 
 
 sigma_P	1.0;
-sigma_G	0.5;
+sigma_G	0.25;
 lp	2e-6;
 lg	2e-6;
 deltaf_g	0.125;
 deltaf_p	0.25;
-D0	2.0;//0.034;
-Qg	5000;//140e3;
+D0	1.5;//0.034;
+Qg	1000;//140e3;
 
 //Voronoi Tesselation Parameters
-N_Seeds 10; //used to seed the initial microstructure with tesselatefoam
+N_Seeds 100; //used to seed the initial microstructure with tesselatefoam
 
 Xmin -0.05e-6;
 Xmax 0.05e-6;

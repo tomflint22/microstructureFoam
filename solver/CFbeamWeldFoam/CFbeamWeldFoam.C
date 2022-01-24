@@ -22,10 +22,10 @@ License
     along with OpenFOAM.  If not, see <http://www.gnu.org/licenses/>.
 
 Application
-    interFusionFoam
+    NAME HERE
 
 Description
-    Solver for 2 incompressible, non-isothermal immiscible fluids experiencing fusion state changes
+    EXPAND DESCRIPTION....Solver for 2 incompressible, non-isothermal immiscible fluids experiencing fusion state changes
     using a VOF (volume of fluid) phase-fraction based interface capturing approach,
     with optional mesh motion and mesh topology changes including adaptive
     re-meshing. Captures the melting and fusion of an alloy
@@ -33,6 +33,7 @@ Description
     Credit:
 
     Tom Flint, University of Manchester
+    Danny Dreelan, University College Dublin
     Gowthaman Parivendhan, University College Dublin
     Philip Cardiff, University College Dublin
 

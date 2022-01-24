@@ -40,7 +40,9 @@ DivergingOscillatingGaussian.H \
 UEqn.H \
 TEqn.H \
 pEqn.H \
+nucleate.H \
 PFEqns.H \
+populateGrainNum.H \
 $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/parRun.H \
 $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/Time.H \
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/fvMesh.H \
@@ -98,6 +100,7 @@ $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/listOptions.H \
 $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/listOutput.H \
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/createControl.H \
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/createTimeControls.H \
+setNucleationSites.H \
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/createRDeltaT.H \
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/createPhi.H \
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/readGravitationalAcceleration.H \
@@ -916,7 +919,9 @@ DivergingOscillatingGaussian.H :
 UEqn.H :
 TEqn.H :
 pEqn.H :
+nucleate.H :
 PFEqns.H :
+populateGrainNum.H :
 $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/parRun.H :
 $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/Time.H :
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/fvMesh.H :
@@ -974,6 +979,7 @@ $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/listOptions.H :
 $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/listOutput.H :
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/createControl.H :
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/createTimeControls.H :
+setNucleationSites.H :
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/createRDeltaT.H :
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/createPhi.H :
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/readGravitationalAcceleration.H :

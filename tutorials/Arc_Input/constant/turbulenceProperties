@@ -9,36 +9,13 @@ FoamFile
 {
     version     2.0;
     format      ascii;
-    class       volScalarField;
-    object      p_rgh;
+    class       dictionary;
+    location    "constant";
+    object      turbulenceProperties;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-dimensions      [0 0 0 1 0 0 0];
+simulationType  laminar;
 
-internalField   uniform 300.0;
-
-boundaryField
-{
-	frontAndBack{
-type fixedValue;
-value uniform 300;
-	}
-
-    lowerWall
-    {
-type zeroGradient;
-    }
-
-    atmosphere
-    {
-type zeroGradient;
-    }
-
-    defaultFaces
-    {
-        type            empty;
-    }
-}
 
 // ************************************************************************* //

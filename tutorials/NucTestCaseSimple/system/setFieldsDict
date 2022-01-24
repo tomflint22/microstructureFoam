@@ -19,7 +19,7 @@ defaultFieldValues
 (
     volScalarFieldValue alpha.phase1 0
     volScalarFieldValue xi 0.0
-    volScalarFieldValue Temperature 900
+   // volScalarFieldValue Temperature 850
 );
 
 regions
