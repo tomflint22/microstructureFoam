@@ -19,8 +19,10 @@ DynamicList<label> cellsToBeNuced (0);
 forAll(nucSiteField,i){
     if (nucSiteField[i] > -100){ // dummy value = -100
 
-        // Check if undercooling has been reached.
-        if (Tu[i] >= nucTu[i])
+        if (
+                (Tu[i] >= nucTu[i]) // Nucleation undercooling has been reached.
+            &&  (xi[i] < xiThreshold) // xi is below the threshold, to stop nucleation inside existing solid.
+            )
         {
             // Cell is to be nucleated, or re nucleated.
             xi[i] = 1.0; // Set global field
