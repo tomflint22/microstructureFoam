@@ -16,17 +16,31 @@ for(int i = 0; i < nProcs; i++){
 // Use a dynamic list on each processor to record cells that should be nucleated.
 DynamicList<label> cellsToBeNuced (0);
 
-forAll(nucSite,i){
-    if (nucSite[i] > 0){
+forAll(nucSiteField,i){
+    if (nucSiteField[i] > -100){ // dummy value = -100
 
         // Check if undercooling has been reached.
         if (Tu[i] >= nucTu[i])
         {
-            // Cell is to be nucleated
-
-            cellsToBeNuced.append(i);
+            // Cell is to be nucleated, or re nucleated.
             xi[i] = 1.0; // Set global field
-            nucSite[i] = 0; // 0 = deactived nucleation site
+
+            // Check if site hasn't been nucleated yet
+            // It will need to be assigned a new field
+            if (nucSiteField[i] == -1)
+            {
+                cellsToBeNuced.append(i);    
+            }
+
+            else if (nucSiteField[i] > -1) // It was already nucleated, and assigned a field
+            {
+                // nucSiteField should be equal to the number of the field e.g. n.17, that was set during the first nucleation event
+                label fieldNumber(nucSiteField[i]);
+
+                // Set that field to 1.0
+                PopBal[fieldNumber][i] = 1.0;
+            }
+            
         }
     }
 }
@@ -44,9 +58,11 @@ for(int i = 0; i < nProcs; i++){
             label nucCellI = cellsToBeNuced[j];
             maxNiIndex++; // Increment, so that it nucleates it in the next available field
             PopBal[maxNiIndex][nucCellI] = 1.0;
+            nucSiteField[nucCellI] = maxNiIndex; // Set nucSiteField number. Used for re-nucleation.
             printf("Cell %d was nucleated my proc %d on field n.%d\n", nucCellI, myProc, maxNiIndex);
         }
     }
     // Need to sync this new maxNiIndex with the other processes
     reduce(maxNiIndex, maxOp<label>());   
 }
+
