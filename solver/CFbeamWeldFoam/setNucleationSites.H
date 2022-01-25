@@ -157,7 +157,7 @@ forAll(nucTu, i){
 
     if (
             (rand0to1 < pSite)
-        &&  (xi[i] < xiThreshold) // Not already solid.
+        // &&  (xi[i] < xiThreshold) // Not already solid.
         )
     {
         scalar GaussZ = Tu_normal(generator);
