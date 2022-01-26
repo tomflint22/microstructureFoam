@@ -115,24 +115,24 @@ volScalarField nucTu
 );
 
 
-Info << "Marking nucleation sites (nucSite):\t"
-    << "-1 = Not a site\t"
-    << "0 = Site that is NOT active\t"
-    << "1 = Sit that IS active."
+Info << "Marking nucleation sites (nucSiteField):\n"
+    << "\t-100 = Not a site\n"
+    << "\t-1 = A potential site\t"
+    << "\tAfter nucleation, nucSiteField is set to the field number, e.g. nucSiteField = 17 for n.17"
     << endl;
 
-volScalarField nucSite
+volScalarField nucSiteField
 (
     IOobject
     (
-        "nucSite",
+        "nucSiteField",
         runTime.timeName(),
         mesh,
         IOobject::READ_IF_PRESENT,
         IOobject::AUTO_WRITE // Could be manually written instead
     ),
     mesh,
-    dimensionedScalar("nucSite",dimensionSet(0, 0, 0, 1, 0),-1)
+    dimensionedScalar("nucSiteField",dimensionSet(0, 0, 0, 1, 0),-100)
 );
 
 
@@ -157,7 +157,7 @@ forAll(nucTu, i){
 
     if (
             (rand0to1 < pSite)
-        &&  (xi[i] < xiThreshold) // Not already solid.
+        // &&  (xi[i] < xiThreshold) // Not already solid.
         )
     {
         scalar GaussZ = Tu_normal(generator);
@@ -179,7 +179,7 @@ forAll(nucTu, i){
 
         //- Sparsely populated volScalarFields
         // nucCells[i]( label(i) ); // Add cell to list of nucleation sites
-        nucSite[i] = 1.0; // 1 = active nuc site
+        nucSiteField[i] = -1.0; // 1 = active nuc site
         nucTu[i] = GaussTu;
 
         ni_fieldsNeeded++;
