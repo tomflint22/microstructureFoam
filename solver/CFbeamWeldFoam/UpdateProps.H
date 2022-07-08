@@ -14,5 +14,28 @@
     nneps1=fvc::grad(epsilon1)/((mag(gradepsilon1) + deltaN));
     nneps1.correctBoundaryConditions();
 
-    gh=epsilon1*(g & mesh.C());
-    ghf= fvc::interpolate(epsilon1)*(g & mesh.Cf());
+
+const volScalarField e1temp(fvc::average(epsilon1));
+
+scalarField& epsilon1maskI = epsilon1mask.primitiveFieldRef();
+const scalarField& e1tempI = e1temp.internalField();
+const scalarField& epsilon1I = epsilon1.internalField();
+
+forAll(epsilon1maskI, celli)
+{
+    if (e1tempI[celli] <= 0.95)
+    {
+        epsilon1maskI[celli] = 0.0;
+    }
+    else
+    {
+        epsilon1maskI[celli] = epsilon1I[celli];
+    }
+
+}
+
+epsilon1mask.correctBoundaryConditions();
+
+
+    gh=epsilon1mask*(g & mesh.C());
+    ghf= fvc::interpolate(epsilon1mask)*(g & mesh.Cf());

@@ -844,6 +844,20 @@ volScalarField epsilon1
 
 epsilon1=1.0-xi;
 
+     volScalarField epsilon1mask
+    (
+        IOobject
+        (
+            "epsilon1mask",
+            runTime.timeName(),
+            mesh,
+            IOobject::READ_IF_PRESENT,
+            IOobject::NO_WRITE
+        ),
+        mesh,
+       dimensionedScalar("epsilon1mask",dimensionSet(0,0,0,0,0),0.0)
+    );
+
 volScalarField cp
 (
     IOobject
