@@ -44,6 +44,7 @@ volScalarField T
     mesh
 );
 
+
 #include "createPhi.H"
 
 
@@ -255,6 +256,20 @@ volScalarField TLiquidus
     dimensionedScalar("TLiquidus",dimensionSet(0, 0, 0, 1, 0),1.0)
 );
 TLiquidus=alpha1*Tliquidus1 + (1.0-alpha1)*Tliquidus2;
+
+Info<< "Creating undercooling field (Tu)\n" << endl;
+volScalarField Tu
+(
+    IOobject
+    (
+        "Tu",
+        runTime.timeName(),
+        mesh,
+        IOobject::MUST_READ,
+        IOobject::AUTO_WRITE
+    ),
+    TLiquidus - T
+);
 
 volScalarField DC
 (
@@ -699,6 +714,23 @@ volScalarField ErrorTrack2
         )
     );
 
+    volScalarField xi
+    (
+        IOobject
+        (
+            "xi",
+            runTime.timeName(),
+            mesh,
+            IOobject::READ_IF_PRESENT,
+            IOobject::AUTO_WRITE
+        ),
+        mesh,
+        dimensionedScalar("xi",dimensionSet(0, 0, 0, 0, 0),0.0),
+        zeroGradientFvPatchScalarField::typeName
+    );
+
+#   include "setNucleationSites.H"
+
 
 label N_Ori(readLabel(PhaseFieldProperties.lookup("N_Phases")));
 
@@ -740,34 +772,48 @@ PtrList<volScalarField> Sum_parts(N_Ori);
 //Phase Field Stuff for Non-Conserved Parameters
 
 
-
-    forAll( mesh.C(), celli)
+// Melt any cells that are above liquidus
+forAll( mesh.C(), celli)
 {
-
-if(T[celli]>TLiquidus[celli]){
-
-for(label count = 0; count < N_Ori; count++)
-{
-PopBal[count][celli] = 0.0;
-}
-}
-
+    if(T[celli]>TLiquidus[celli]){
+        for(label count = 0; count < N_Ori; count++)
+        {
+            PopBal[count][celli] = 0.0;
+            xi[celli] = 0.0;
+        }
+    }
 }
 
-    volScalarField xi
-    (
-        IOobject
-        (
-            "xi",
-            runTime.timeName(),
-            mesh,
-            IOobject::READ_IF_PRESENT,
-            IOobject::AUTO_WRITE
-        ),
-        mesh,
-	    dimensionedScalar("xi",dimensionSet(0, 0, 0, 0, 0),0.0),
-	    zeroGradientFvPatchScalarField::typeName
-    );
+// // Get max field number that currently exists.
+label maxNiIndex(-1);
+
+forAll(PopBal,i){
+    scalar maxVal = gMax(PopBal[i]);
+    Info << "PopBal[" <<i << "] max = " << maxVal << endl;
+    if (maxVal > SMALL){ // field is non-zero
+        // ni_active[i] = true; // turn on writing of field
+        if (i > maxNiIndex)
+        {
+            maxNiIndex = i;
+        }
+    }
+}
+
+Info << "\nmaxNiIndex: " << maxNiIndex << nl << endl; 
+
+// //Phase Field Stuff for Non-Conserved Parameters
+// forAll( mesh.C(), celli)
+// {
+//     if(Temperature[celli]>TLiquidus[celli]){
+
+//         for(label count = 0; count < N_Ori; count++)
+//         {
+//             PopBal[count][celli] = 0.0;
+//         }
+//     }
+// }
+
+
 // xi.write();
 
         volScalarField phi_PF

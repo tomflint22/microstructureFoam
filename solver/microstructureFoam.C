@@ -26,6 +26,8 @@ Application
 
 Authors
     Tom Flint, UoM.
+    Danny Dreelan, UoM.
+    Pratheek Shantraj, UoM.
     Philip Cardiff, UCD.
     Gowthaman Parivendhan, UCD.
 
@@ -51,6 +53,8 @@ Description
 #include "CorrectPhi.H"
 #include "fvcSmooth.H"
 #include "findLocalCell.H"
+
+#include <random>    
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -207,6 +211,8 @@ int main(int argc, char *argv[])
             {
                 #include "pEqn.H"
             }
+
+            #   include "nucleate.H"
 
             #include "PFEqns.H"
 
