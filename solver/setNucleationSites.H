@@ -151,12 +151,23 @@ volScalarField nucSite
         "nucSite",
         runTime.timeName(),
         mesh,
-        IOobject::READ_IF_PRESENT,
+        IOobject::NO_READ,
         IOobject::AUTO_WRITE // Could be manually written instead
     ),
     mesh,
-    dimensionedScalar("nucSite",dimensionSet(0, 0, 0, 1, 0),-1)
+    dimensionedScalar("nucSite",dimensionSet(0, 0, 0, 1, 0),-1.0)
 );
+Info << "gMax nucSite: " << gMax(nucSite) << endl;
+label numSitesToBeNuced(0);
+forAll(nucSite,i){
+    if (nucSite[i] > -0.5){
+
+        numSitesToBeNuced++;
+    }
+}
+
+Info << "\n\nBefore set No. potential nucleation sites: " << numSitesToBeNuced << nl << endl;
+
 
 
 //- Create counters for number of fields needed
@@ -169,7 +180,7 @@ label numNucSitesSet(0);
 // same number of phase field parameter fields.
 
 // Read threshold value for xi, above which no nucleation sites should be set.
-scalar xiThreshold(readScalar(nucleationDict.lookup("xiThreshold")));
+// scalar xiThreshold(readScalar(nucleationDict.lookup("xiThreshold")));
 
 // Info << "pSite: " << pSite << "\tN_max: " << N_max << "nCell: " << mesh.nCells() 
 // << "\tN_max/nCells" << N_max/mesh.nCells() << endl;
@@ -202,7 +213,8 @@ forAll(nucTu, i){
 
         //- Sparsely populated volScalarFields
         // nucCells[i]( label(i) ); // Add cell to list of nucleation sites
-        if (xi[i] < xiThreshold)
+        // if (xi[i] < xiThreshold)
+        if (grainNum[i] < -0.5)
         {
             nucSite[i] = 1.0; // 1 = active nuc site
         }
@@ -227,10 +239,13 @@ int myProc = Pstream::myProcNo();
 
 // Info << "Current processor number: " << myProc << " out of " << nProcs << endl;
 
-Info << "\nCarrying out reduce operation to sum up all number of ni_needed across processors" << endl;
+Info << "\nCarrying out reduce operation to sum up all number of ni_needed across "<< nProcs<<" processors" << endl;
 
 int ni_fieldsNeeded_myProc = ni_fieldsNeeded;
+
+Info << "before ni_fieldsNeeded: " << ni_fieldsNeeded << endl; 
 reduce(ni_fieldsNeeded, sumOp<int>());
+Info << "after ni_fieldsNeeded: " << ni_fieldsNeeded << endl;
 
 
 for(int i = 0; i < nProcs; i++){
@@ -256,6 +271,20 @@ if (checkThatNucSitesExist)
 }
 
 Info << "Number of potential nucleation sites: " << numNucSitesSet << endl;
+
+
+// label numSitesToBeNuced(0);
+numSitesToBeNuced = 0;
+
+forAll(nucSite,i){
+    if (nucSite[i] > -0.5){
+
+        numSitesToBeNuced++;
+    }
+}
+
+Info << "\n\nNo. potential nucleation sites: " << numSitesToBeNuced << nl << endl;
+
 
 // Printing nucSite
 // Info << "\n--NucSites--  size: " << numNucSitesSet << "\tnCells: " << mesh.nCells() << endl;

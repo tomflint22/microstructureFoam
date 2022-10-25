@@ -714,6 +714,12 @@ volScalarField ErrorTrack2
         )
     );
 
+    // Read some parameters from PhaseFieldProperties
+    scalar xiThreshold
+    (
+        PhaseFieldProperties.lookupOrDefault<scalar>("xiThreshold",scalar(0.5))// / 57.2958;
+    );
+
     volScalarField xi
     (
         IOobject
@@ -729,12 +735,30 @@ volScalarField ErrorTrack2
         zeroGradientFvPatchScalarField::typeName
     );
 
+volScalarField grainNum
+(
+    IOobject
+    (
+        "grainNum",
+        runTime.timeName(),
+        mesh,
+        IOobject::READ_IF_PRESENT,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionedScalar("grainNum",dimensionSet(0, 0, 0, 0, 0),-1.0),
+    zeroGradientFvPatchScalarField::typeName
+);
+
 #   include "setNucleationSites.H"
 
 
-label N_Ori(readLabel(PhaseFieldProperties.lookup("N_Phases")));
-
+// label N_Ori(readLabel(PhaseFieldProperties.lookup("N_Phases")));
+// This will need updating here when using tesselation/initial grain structure
+label N_Ori = ni_fieldsNeeded;
 Info<<"Number of Phase Field Order Parameters: "<<N_Ori<<endl;
+
+
 
 
 
@@ -799,7 +823,9 @@ forAll(PopBal,i){
     }
 }
 
-Info << "\nmaxNiIndex: " << maxNiIndex << nl << endl; 
+Info << "\nmaxNiIndex: " << maxNiIndex << nl << endl;
+
+
 
 // //Phase Field Stuff for Non-Conserved Parameters
 // forAll( mesh.C(), celli)

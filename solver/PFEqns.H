@@ -66,65 +66,52 @@ GBs*=0.0;
 
 for(label count = 0; count < N_Ori; count++)
 {
+    if (niActive[count])
+    {
+        volScalarField& ni = PopBal[count];
 
+        GBs+=ni*ni;
 
+        volScalarField test12 = (ni*ni*ni) - ni + 2.0*ni*(1.0-xi)*(1.0-xi);
 
-volScalarField& ni = PopBal[count];
+        Sum_Phases+=ni;
+    // volScalarField test12addition = 0.0*ni;//NEED TO SET THIS TO ZERO BETTER
+        for(label count2 = 0; count2 < N_Ori; count2++)
+        {
+            if (niActive[count2])
+            {
+                if(count != count2){
+                    volScalarField& nj = PopBal[count2];
+                    // test12addition += nj*nj;
+                    test12+=2.0*gamma_pf*ni*nj*nj;
+                }
+            }
+        }
+        // test12+=2.0*gamma_pf*ni*test12addition;
 
-GBs+=ni*ni;
-
-volScalarField test12 = (ni*ni*ni) - ni + 2.0*ni*(1.0-xi)*(1.0-xi);
-
-
-    Sum_Phases+=ni;
-// volScalarField test12addition = 0.0*ni;//NEED TO SET THIS TO ZERO BETTER
-for(label count2 = 0; count2 < N_Ori; count2++)
-{
-
-
-
-if(count != count2){
-volScalarField& nj = PopBal[count2];
-// test12addition += nj*nj;
-test12+=2.0*gamma_pf*ni*nj*nj;
-}
-
-
-
-}
-// test12+=2.0*gamma_pf*ni*test12addition;
-
-Sum_parts.set(count,new volScalarField(test12));//
+        Sum_parts.set(count,new volScalarField(test12));//
         // volScalarField& Su=Sum_parts[count];
-
-
-
+    }
 }
-
-
-
-
-
-
-
 
 
 
 for(label count = 0; count < N_Ori; count++)
 {
 
-    volScalarField& ni = PopBal[count];
-    volScalarField& Su=Sum_parts[count];
-
-
-    
-solve
-                (
-                    fvm::ddt(ni) 
-                    ==
-                    -Lg*m_g*Su
-                     +Lg*fvm::laplacian(Kg,ni)
-                );
+    if (niActive[count])
+    {
+        volScalarField& ni = PopBal[count];
+        volScalarField& Su=Sum_parts[count];
+        
+        solve
+        (
+            fvm::ddt(ni) 
+            ==
+            -Lg*m_g*Su
+            +Lg*fvm::laplacian(Kg,ni)
+        );
+    }
 }
 
 
@@ -132,10 +119,10 @@ phi_PF=0.5*(1.0-(Foam::tanh(1e3*((T/TLiquidus)-1.0))));
 
 
 solve(
-fvm::ddt(xi)
-==
--Lp*m_p*((2.0*xi*(1.0-phi_PF))-(2.0*phi_PF*(1.0-xi))) + Lp*m_g*(2.0*(1.0-xi)*GBs)
-+Lp*fvm::laplacian(Kp,xi)
+    fvm::ddt(xi)
+    ==
+    -Lp*m_p*((2.0*xi*(1.0-phi_PF))-(2.0*phi_PF*(1.0-xi))) + Lp*m_g*(2.0*(1.0-xi)*GBs)
+    +Lp*fvm::laplacian(Kp,xi)
 );
 
 

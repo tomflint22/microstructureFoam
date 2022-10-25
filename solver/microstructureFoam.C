@@ -78,6 +78,17 @@ int main(int argc, char *argv[])
         #include "setInitialDeltaT.H"
     }
 
+    boundBox meshBox(mesh.points());
+    scalar meshLx = mag( meshBox.max().component(0) - meshBox.min().component(0) );
+    scalar meshLy = mag( meshBox.max().component(1) - meshBox.min().component(1) );
+    scalar meshLz = mag( meshBox.max().component(2) - meshBox.min().component(2) );
+
+    Info << "Mesh dimenions:" << endl
+    << "X: " << meshBox.min().component(0) << "\tto\t" << meshBox.max().component(0) << "\t(" << meshLx << " m)" << endl
+    << "Y: " << meshBox.min().component(1) << "\tto\t" << meshBox.max().component(1) << "\t(" << meshLy << " m)" << endl
+    << "Z: " << meshBox.min().component(2) << "\tto\t" << meshBox.max().component(2) << "\t(" << meshLz << " m)" << endl
+    << endl;
+
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
     Info<< "\nStarting time loop\n" << endl;
 
@@ -214,7 +225,35 @@ int main(int argc, char *argv[])
 
             #   include "nucleate.H"
 
+            // Need to mark n.X fields that are active
+            // Making a list, will make it on every MPI process, so we should use max rather than gMax
+            List<bool> niActive (PopBal.size(),true);
+
+            forAll(niActive,i){
+                // if (gMax(PopBal[i]) < SMALL)
+                if (max(PopBal[i]).value() < SMALL)
+                {
+                    niActive[i] = false;
+                }
+            }
+
+            // forAll()
+
             #include "PFEqns.H"
+
+            Info << "Populating grain number field" << endl;
+
+            // if (runTime.writeTime())
+            // {
+                forAll(PopBal,i){
+                    forAll(grainNum,j){
+                        // if(PopBal[i][j] > SMALL){
+                        if(PopBal[i][j] > 0.5){
+                            grainNum[j] = i;
+                        }   
+                    }
+                }
+            // }
 
             if (pimple.turbCorr())
             {

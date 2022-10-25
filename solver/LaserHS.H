@@ -154,7 +154,7 @@
     // int countbeams=0;
     forAll(pointslistGlobal1, i)
     {
-        Info<<"Beam: "<<i<<endl;
+        // Info<<"Beam: "<<i<<endl;
 
         vector V2(V_incident/mag(V_incident));
         // Pout<<"TEST_HERE2"<<endl;
