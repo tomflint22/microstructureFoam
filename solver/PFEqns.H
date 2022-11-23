@@ -128,7 +128,7 @@ solve
 }
 
 
-phi_PF=0.5*(1.0-(Foam::tanh(1e3*((T/TLiquidus)-1.0))));
+phi_PF=0.5*(1.0-(Foam::tanh(1e5*((T/TLiquidus)-1.0))));
 
 
 solve(
