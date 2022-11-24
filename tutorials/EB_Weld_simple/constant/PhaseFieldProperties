@@ -16,23 +16,23 @@ FoamFile
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 
-N_Phases 100;
+N_Phases 120;
 
 gamma_pf	1.5;
 
 sigma_P	1.0;
 sigma_G	0.25;
-lp	0.2e-3;
-lg	0.2e-3;
+lp	0.25e-3;
+lg	0.25e-3;
 deltaf_g	0.125;
 deltaf_p	0.25;
-D0	1.5;//0.034;
-Qg	1000;//140e3;
+D0	5.0;//0.034;
+Qg	20000;//140e3;
 
 
 
 //Voronoi Tesselation Parameters
-N_Seeds 99; //used to seed the initial microstructure with tesselatefoam
+N_Seeds 119; //used to seed the initial microstructure with tesselatefoam
 
 Xmin -0.05e-3;
 Xmax 0.05e-3;
