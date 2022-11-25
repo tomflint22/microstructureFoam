@@ -20,28 +20,36 @@ internalField   uniform 0;
 
 boundaryField
 {
-	frontAndBack{
-        type            fixedFluxPressure;
-        value           uniform 0;
-	}
 
-    lowerWall
+    frontAndBack
+    {
+        type            empty;
+    }
+
+    left
     {
         type            fixedFluxPressure;
         value           uniform 0;
     }
 
-    atmosphere
+    bottom
+    {
+        type            fixedFluxPressure;
+        value           uniform 0;
+    }
+
+    right
+    {
+        type            fixedFluxPressure;
+        value           uniform 0;
+    }
+
+    top
     {
         type            totalPressure;
         p0              uniform 0;
         U               U;
         phi             phi;
-    }
-
-    defaultFaces
-    {
-        type            empty;
     }
 }
 

@@ -19,23 +19,29 @@ internalField   uniform 1;
 
 boundaryField
 {
-	frontAndBack{
-        type            zeroGradient;
-	}
-    lowerWall
-    {
-        type            zeroGradient;
-    }
-    atmosphere
-    {
-        // type            inletOutlet;
-        // inletValue      uniform 0;
-        // value           uniform 0;
-        type            zeroGradient;
-    }
-    defaultFaces
+	frontAndBack
     {
         type            empty;
+	}
+
+    left
+    {
+        type            zeroGradient;
+    }
+
+    bottom
+    {
+        type            zeroGradient;
+    }
+
+    right
+    {
+        type            zeroGradient;
+    }
+
+    top
+    {
+        type            zeroGradient;
     }
 }
 

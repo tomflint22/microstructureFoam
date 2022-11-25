@@ -43,6 +43,7 @@ LaserHS.H \
 UEqn.H \
 TEqn.H \
 pEqn.H \
+nucleate.H \
 PFEqns.H \
 $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/parRun.H \
 $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/Time.H \
@@ -112,6 +113,7 @@ $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/createPhi.H \
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/readGravitationalAcceleration.H \
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/readhRef.H \
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/gh.H \
+setNucleationSites.H \
 $(WM_PROJECT_DIR)/src/twoPhaseModels/twoPhaseMixture/lnInclude/createAlphaFluxes.H \
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/createMRF.H \
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/createFvModels.H \
@@ -947,6 +949,7 @@ LaserHS.H :
 UEqn.H :
 TEqn.H :
 pEqn.H :
+nucleate.H :
 PFEqns.H :
 $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/parRun.H :
 $(WM_PROJECT_DIR)/src/OpenFOAM/lnInclude/Time.H :
@@ -1016,6 +1019,7 @@ $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/createPhi.H :
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/readGravitationalAcceleration.H :
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/readhRef.H :
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/gh.H :
+setNucleationSites.H :
 $(WM_PROJECT_DIR)/src/twoPhaseModels/twoPhaseMixture/lnInclude/createAlphaFluxes.H :
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/createMRF.H :
 $(WM_PROJECT_DIR)/src/finiteVolume/lnInclude/createFvModels.H :

@@ -21,26 +21,39 @@ internalField   uniform (0 0 0);
 
 boundaryField
 {
-	frontAndBack{
-        type            slip;
-	}
-    lowerWall
-    {
-        type            slip;
 
-    }
-    atmosphere
-    {
-type pressureInletOutletVelocity;
-phi phi;
-rho rho;
-tangentialVelocity uniform (0 0 0);
-value uniform (0 0 0);
-    }
-    defaultFaces
+    frontAndBack
     {
         type            empty;
     }
+
+    left
+    {
+        // type            fixedValue;
+        // value           uniform (0 0 0);
+        type            slip;
+    }
+
+    bottom
+    {
+        type            slip;
+    }
+
+    right
+    {
+        type            slip;
+    }
+
+    top
+    {
+        type pressureInletOutletVelocity;
+        phi phi;
+        rho rho;
+        tangentialVelocity uniform (0 0 0);
+        value uniform (0 0 0);
+    }
+
+
 }
 
 

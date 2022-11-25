@@ -21,29 +21,34 @@ internalField   uniform 1930;
 
 boundaryField
 {
-	frontAndBack{
-        type fixedValue;
-        value uniform 1920;
-        // type empty;
-	}
 
-    lowerWall
+    frontAndBack
+    {
+        type            empty;
+    }
+
+    left
     {
         type fixedValue;
         value uniform 1920;
     }
 
-    atmosphere
+    bottom
     {
         type fixedValue;
         value uniform 1920;
     }
 
-    leftWall{
-         type empty;
+    right
+    {
+        type fixedValue;
+        value uniform 1920;
     }
-    rightWall{
-         type empty;
+
+    top
+    {
+        type fixedValue;
+        value uniform 1920;
     }
 }
 

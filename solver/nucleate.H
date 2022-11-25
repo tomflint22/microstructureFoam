@@ -15,38 +15,59 @@ for(int i = 0; i < nProcs; i++){
     }
 }
 
-// Need to activate or deactive nucleation sites based on their xi value
+// Thinking out loud...
+
+// Need to deactivate nucleation sites if they become gas or solid
+label sitesDeactivated(0);
+//- DEACTIVATION LOOP
 forAll(nucSite,i){
     // Deactivate any sites that are now within solid
     if (
-            ( mag(nucSite[i]-1.0) < SMALL) // i.e. == 1
-        // &&  ( xi[i] > SMALL) // has some solid in it
-        // &&  ( xi[i] > xiThreshold) // has some solid in it
-        &&  ( grainNum[i] > -0.5) // has some solid in it
+            ( mag(nucSite[i]-1.0) < SMALL) // currently active site
         )
     {
-        nucSite[i] = 0.0;
-    }
+        // GAS
+        if ( alpha1[i] < 0.5){ // alpha1 = 1 for metal, 0 for gas
+            nucSite[i] = 0.0; // Turn off this site
+            sitesDeactivated++;
+        }
 
-    // Activate any sites that are now within liquid (melted)
-    if (
-            (mag(nucSite[i]) < SMALL) // Currently inactive site (i.e. == 0)
-        // &&  (xi[i] < SMALL) // xi indicates liquid
-        // &&  (xi[i] < xiThreshold) // xi indicates liquid
-        // &&  ( grainNum[i] < -0.5) // has no solid in it
-        && (T[i] > TLiquidus[i])
-        )
-    {
-        nucSite[i] = 1.0;
+        // SOLID
+        else if (epsilon1mask[i] < 0.5) // NOT SOLID solid = 0, everything else = 1)
+        {
+            nucSite[i] = 0.0; // Turn off this site
+            sitesDeactivated++;
+        }
     }
 }
 
+label sitesActivated(0);
+//- ACTIVATION LOOP
+// Only sites within liquid metal should be activated.
+forAll(nucSite,i){
+    if (
+            (mag(nucSite[i]) < SMALL) // Currently inactive site (i.e. == 0)
+        )
+    {
+        if (
+            (alpha1[i] > 0.5) // indicates metal
+        &&  (epsilon1mask[i] > 0.5) // indicates not solid (must be liquid))
+        )
+        {
+            nucSite[i] = 1.0;
+            sitesActivated++;
+        }
+    }
+}
+
+// nucSite.write();
+
 // Use a dynamic list on each processor to record cells that should be nucleated.
 DynamicList<label> cellsToBeNuced (0);
-// label numSitesToBeNuced(0);
-
+label numSitesToBeNuced(0);
+// Info << "gMax nucSite: " << gMax(nucSite) << endl;
 forAll(nucSite,i){
-    if (nucSite[i] > 0){
+    if (nucSite[i] > 0.5){
 
         // Check if undercooling has been reached.
         if (Tu[i] >= nucTu[i])
@@ -54,12 +75,18 @@ forAll(nucSite,i){
             // Cell is to be nucleated
 
             cellsToBeNuced.append(i);
+            numSitesToBeNuced++;
             xi[i] = 1.0; // Set global field
             nucSite[i] = 0; // 0 = deactived nucleation site
         }
     }
 }
+Info << "numSitesToBeNuced: " << numSitesToBeNuced << "\tnum sitesDeactivated: " << sitesDeactivated <<  "\tsitesActivated: " << sitesActivated <<endl;
+// nucSite.write();
+// abort();
 
+
+// abort();
 
 // Now we have a list of cells that should be nucleated on each processor.
 // Need to cycle through processors and nucleate all cells on the processor,

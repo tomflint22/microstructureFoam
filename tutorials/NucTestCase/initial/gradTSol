@@ -21,24 +21,34 @@ internalField   uniform (0 0 0);
 
 boundaryField
 {
-	frontAndBack{
-        type            fixedValue;
-        value           uniform (0 0 0);
-	}
-    lowerWall
-    {
-        type            fixedValue;
-        value           uniform (0 0 0);
 
-    }
-    atmosphere
-    {
-        type            fixedValue;
-        value           uniform (0 0 0);
-    }
-    defaultFaces
+    frontAndBack
     {
         type            empty;
+    }
+
+    left
+    {
+        type            fixedValue;
+        value           uniform (0 0 0);
+    }
+
+    bottom
+    {
+        type            fixedValue;
+        value           uniform (0 0 0);
+    }
+
+    right
+    {
+        type            fixedValue;
+        value           uniform (0 0 0);
+    }
+
+    top
+    {
+        type            fixedValue;
+        value           uniform (0 0 0);
     }
 }
 

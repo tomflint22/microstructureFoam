@@ -1,0 +1,4 @@
+rm -r 0 
+cp -r initial 0 
+rm -r 0.* [1-9]* Performance
+rm -r constant/polyMesh

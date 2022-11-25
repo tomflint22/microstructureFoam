@@ -309,7 +309,7 @@ volScalarField epsilon1mask
         runTime.timeName(),
         mesh,
         IOobject::READ_IF_PRESENT,
-        IOobject::NO_WRITE
+        IOobject::AUTO_WRITE
     ),
     mesh,
     dimensionedScalar("epsilon1mask",dimensionSet(0,0,0,0,0),0.0)
@@ -719,6 +719,12 @@ volScalarField ErrorTrack2
     (
         PhaseFieldProperties.lookupOrDefault<scalar>("xiThreshold",scalar(0.5))// / 57.2958;
     );
+
+    scalar thetaInterface
+    (
+        PhaseFieldProperties.lookupOrDefault<scalar>("thetaInterface",scalar(1e5))// / 57.2958;
+    );
+
 
     volScalarField xi
     (

@@ -115,7 +115,11 @@ for(label count = 0; count < N_Ori; count++)
 }
 
 
-phi_PF=0.5*(1.0-(Foam::tanh(1e5*((T/TLiquidus)-1.0))));
+// <<<<<<< Updated upstream
+// phi_PF=0.5*(1.0-(Foam::tanh(1e5*((T/TLiquidus)-1.0))));
+// // =======
+phi_PF=0.5*(1.0-(Foam::tanh(thetaInterface*((T/TLiquidus)-1.0))));
+// >>>>>>> Stashed changes
 
 
 solve(
