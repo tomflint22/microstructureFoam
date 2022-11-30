@@ -65,5 +65,89 @@ forAll( mesh.C(), celli)
 epsilon1mask.correctBoundaryConditions();
 
 
+
+
+
+
+
+
+//Anisotropy_Stuff
+
+
+for(label count = 0; count < N_Ori; count++)
+{
+volScalarField& ni = PopBal[count];
+
+// Info<<rot[count]<<endl;
+
+gradi[count] = (rot2[count].R() & (((fvc::grad(ni))/(mag(fvc::grad(ni))+deltaN))));
+gradi[count].correctBoundaryConditions();
+}
+
+
+
+for(label count = 0; count < N_Ori; count++)//find the number of non zero phases at each point in the domain
+{
+
+volScalarField n_x=(gradi[count].component(0));
+volScalarField n_y=(gradi[count].component(1));
+volScalarField n_z=(gradi[count].component(2));
+
+
+phi_Mob[count]=
+                            1.0+(Aniso_strength.value()*(
+
+
+                            (4.0*(Foam::pow(n_x,4.0)+
+                            Foam::pow(n_y,4.0)+
+                            Foam::pow(n_z,4.0)))-3.0
+                            
+                            ));
+phi_Mob[count].correctBoundaryConditions();
+
+}
+
+
+
+
+
+
+numerator *=0.0;
+denominator *=0.0;
+Aniso_Mob*=0.0;
+for(label i = 0; i < N_Ori; i++)//find the number of non zero phases at each point in the domain
+{
+
+volScalarField niav = fvc::average(PopBal[i]);
+volScalarField xiav = fvc::average(xi);
+
+numerator+=phi_Mob[i]*niav*niav*(1.0-xiav)*(1.0-xiav);
+denominator+=niav*niav*(1.0-xiav)*(1.0-xiav);
+    // for(label j = 0; j < N_Ori; j++)//find the number of non zero phases at each point in the domain
+    // {
+    //    numerator+=phi_Mob[i]
+
+
+    // }
+
+}
+
+Aniso_Mob=numerator/(denominator+deltaN2);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 gh=epsilon1mask*(g & mesh.C());
 ghf= fvc::interpolate(epsilon1mask)*(g & mesh.Cf());

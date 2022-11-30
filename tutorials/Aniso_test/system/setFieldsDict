@@ -17,7 +17,7 @@ FoamFile
 
 defaultFieldValues
 (
-    volScalarFieldValue alpha.metal 0
+    volScalarFieldValue alpha.metal 1
     volScalarFieldValue xi 0.0
 );
 
@@ -26,28 +26,45 @@ regions
 
 
 
-     boxToCell
-     {
-         box (-1 2.501e-3 -1) (1 27.501e-3 1);
-         fieldValues
-         (
-     volScalarFieldValue alpha.metal 1
- volScalarFieldValue xi 1.0
-         );
-     }
-
-     boxToCell
-     {
-         box (-1 2.501e-3 3e-3) (1 27.501e-3 7e-3);
-         fieldValues
-         (
-     volScalarFieldValue T 1800
- volScalarFieldValue xi 0.0
-         );
-     }
-
-
-
+ 
+ sphereToCell
+    {
+        centre (0.0 0.005 0.005);
+        radius 0.0005;
+        fieldValues
+        (
+volScalarFieldValue n.0 1
+volScalarFieldValue xi 1.0
+volScalarFieldValue T 1620
+        );
+    }
+    
+     sphereToCell
+    {
+        centre (0.0 0.0025 0.0025);
+        radius 0.0005;
+        fieldValues
+        (
+volScalarFieldValue n.1 1
+volScalarFieldValue xi 1.0
+volScalarFieldValue T 1620
+        );
+    }
+    
+     sphereToCell
+    {
+        centre (0.0 0.0075 0.0075);
+        radius 0.0005;
+        fieldValues
+        (
+volScalarFieldValue n.2 1
+volScalarFieldValue xi 1.0
+volScalarFieldValue T 1620
+        );
+    }
+    
+    
+   
 );
 
 

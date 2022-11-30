@@ -39,11 +39,12 @@ dimensionedScalar Kp = (3.0/4.0)*sigma_P*lp;
 dimensionedScalar gasconstant("gasconstant",dimensionSet(1, 2, -2, -1, -1),scalar(8.314));
 
 // volScalarField 
-Lg = D0*Foam::exp((-Qg)/(gasconstant*T));
+Lg = (GBs+Aniso_Mob)*(D0*Foam::exp((-Qg)/(gasconstant*T)))*1.0;
 
 // dimensionedScalar Lp("Lp", dimensionSet(-1, 1, 1, 0, 0), readScalar(PhaseFieldProperties.lookup("Lp")));
 
-dimensionedScalar Lp = 1.0*D0*Foam::exp((-Qg)/(gasconstant*Tliquidus1));
+// dimensionedScalar 
+Lp = Aniso_Mob*(1.0*D0*Foam::exp((-Qg)/(gasconstant*T)));
 
 // Info<<m_p.value()<<endl;
 // Info<<m_g.value()<<endl;

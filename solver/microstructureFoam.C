@@ -52,6 +52,8 @@ Description
 #include "fvcSmooth.H"
 #include "findLocalCell.H"
 
+#include "quaternion.H"
+
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 int main(int argc, char *argv[])

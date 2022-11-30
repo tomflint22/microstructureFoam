@@ -9,46 +9,46 @@ FoamFile
 {
     version     2.0;
     format      ascii;
-    class       dictionary;
-    location    "system";
-    object      setFieldsDict;
+    class       volScalarField;
+    object      p_rgh;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-defaultFieldValues
-(
-    volScalarFieldValue alpha.metal 0
-    volScalarFieldValue xi 0.0
-);
+dimensions      [0 0 0 1 0 0 0];
 
-regions
-(
+// Tliq = 1723 1928.15
+internalField   uniform 1623.0;
+
+boundaryField
+{
+	frontAndBack{
+        type fixedValue;
+        value uniform 1623.0;
+	}
+
+    lowerWall
+    {
+        type fixedValue;
+        value uniform 1623.0;
+    }
+    leftWall
+    {
+        type fixedValue;
+        value uniform 1623.0;
+    }
+    rightWall
+    {
+        type fixedValue;
+        value uniform 1623.0;
+    }
+
+    atmosphere
+    {
+        type fixedValue;
+        value uniform 1626.0;
+    }
 
 
-
-     boxToCell
-     {
-         box (-1 2.501e-3 -1) (1 27.501e-3 1);
-         fieldValues
-         (
-     volScalarFieldValue alpha.metal 1
- volScalarFieldValue xi 1.0
-         );
-     }
-
-     boxToCell
-     {
-         box (-1 2.501e-3 3e-3) (1 27.501e-3 7e-3);
-         fieldValues
-         (
-     volScalarFieldValue T 1800
- volScalarFieldValue xi 0.0
-         );
-     }
-
-
-
-);
-
+}
 
 // ************************************************************************* //

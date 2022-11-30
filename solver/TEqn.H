@@ -9,12 +9,15 @@
     const volScalarField rhoCp(rho*cp);
     const surfaceScalarField rhophicp(fvc::interpolate(cp)*rhoPhi);
 
-    // do
-    // {
-        // iter++;
-        // epsilon1.storePrevIter();
+    do
+    {
+        iter++;
+        epsilon1.storePrevIter();
         // T.storePrevIter();
         TRHS = LatentHeat*((fvc::ddt(rho,epsilon1) + fvc::div(rhoPhi, epsilon1)));
+        // TRHS = LatentHeat*rho*ddte1;//((fvc::ddt(rho,epsilon1) + fvc::div(rhoPhi, epsilon1)));
+
+        // ddte1
 
         const volTensorField gradU(fvc::grad(U));
         volTensorField tau(((mixture.mu()*gradU) + (mixture.mu()*gradU.T()))-((2.0/3.0)*mixture.mu()*(fvc::div(phi))*I));
@@ -47,17 +50,17 @@
         epsilon1=max(min(1.0-xi,scalar(1)),scalar(0));
         // epsilon1 = max(min(epsilon1+(epsilonRel*cp/LatentHeat)*(T-Tcorr),scalar(1)),scalar(0));
 
-        // residual = gMax(mag(epsilon1.primitiveField()-epsilon1.prevIter().primitiveField()));
+        residual = gMax(mag(epsilon1.primitiveField()-epsilon1.prevIter().primitiveField()));
 
-        // meanResidual = gSum(mag(epsilon1.primitiveField()-epsilon1.prevIter().primitiveField())*mesh.V())/gSum(mesh.V().field());
+        meanResidual = gSum(mag(epsilon1.primitiveField()-epsilon1.prevIter().primitiveField())*mesh.V())/gSum(mesh.V().field());
 
         Info<< "Correcting epsilon1, mean residual = " << meanResidual.value()
             << ", max residual = " << residual.value()
             << endl;
 
         ddte1 = fvc::ddt(epsilon1);
-    // }
-    // while ((iter < minTCorr || (residual > epsilonTol) ) && iter <= maxTCorr );
+    }
+    while ((iter < minTCorr || (residual > epsilonTol) ) && iter <= maxTCorr );
 
     T.correctBoundaryConditions();
     gradT = fvc::grad(T);
