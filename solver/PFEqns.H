@@ -45,15 +45,15 @@ dimensionedScalar gasconstant("gasconstant",dimensionSet(1, 2, -2, -1, -1),scala
 
 for(label count = 0; count < N_Ori; count++)
 {
-    // if (niActive[count])
-    // {
+    if (niActive[count])
+    {
 volScalarField& ni = PopBal[count];
 
 // Info<<rot[count]<<endl;
 
 gradi[count] = (rot2[count].R() & (((fvc::grad(ni))/(mag(fvc::grad(ni))+deltaN))));
 gradi[count].correctBoundaryConditions();
-    // }
+    }
 }
 
 
@@ -61,8 +61,8 @@ gradi[count].correctBoundaryConditions();
 for(label count = 0; count < N_Ori; count++)//find the number of non zero phases at each point in the domain
 {
 
-// if (niActive[count])
-//     {
+if (niActive[count])
+    {
 volScalarField n_x=(gradi[count].component(0));
 volScalarField n_y=(gradi[count].component(1));
 volScalarField n_z=(gradi[count].component(2));
@@ -78,7 +78,7 @@ phi_Mob[count]=
                             
                             ));
 phi_Mob[count].correctBoundaryConditions();
-    // }
+    }
 }
 
 
@@ -91,8 +91,8 @@ denominator *=0.0;
 Aniso_Mob*=0.0;
 for(label i = 0; i < N_Ori; i++)//find the number of non zero phases at each point in the domain
 {
-    // if (niActive[i])
-    // {
+    if (niActive[i])
+    {
 
 volScalarField niav = fvc::average(PopBal[i]);
 volScalarField xiav = fvc::average(xi);
@@ -100,7 +100,7 @@ volScalarField xiav = fvc::average(xi);
 numerator+=phi_Mob[i]*niav*niav*(1.0-xi)*(1.0-xi);
 denominator+=niav*niav*(1.0-xi)*(1.0-xi);
 
-    // }
+    }
 }
 
 Aniso_Mob=numerator/(denominator+deltaN2);
