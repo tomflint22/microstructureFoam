@@ -107,4 +107,11 @@ for(int i = 0; i < nProcs; i++){
     reduce(maxNiIndex, maxOp<label>());   
 }
 
+
+// for(label count = 0; count < N_Ori; count++)
+// {
+// PopBal[count].correctBoundaryConditions();
+// }
+// xi.correctBoundaryConditions();
+
 Info << "end of nucleation " << endl;

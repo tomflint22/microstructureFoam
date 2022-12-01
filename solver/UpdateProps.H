@@ -65,5 +65,14 @@ forAll( mesh.C(), celli)
 epsilon1mask.correctBoundaryConditions();
 
 
+
+
+
+
+
+
+
+
+
 gh=epsilon1mask*(g & mesh.C());
 ghf= fvc::interpolate(epsilon1mask)*(g & mesh.Cf());

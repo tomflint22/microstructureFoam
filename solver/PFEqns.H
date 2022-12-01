@@ -1,15 +1,5 @@
 {
 
-/*
-dimensionedScalar Kg("Kg", dimensionSet(0, 2, -1, 0, 0), readScalar(PhaseFieldProperties.lookup("Kg")));
-dimensionedScalar gamma_pf("gamma_pf", dimensionSet(0, 0, 0, 0, 0), readScalar(PhaseFieldProperties.lookup("gamma_pf")));
-dimensionedScalar m_g("m_g", dimensionSet(0, 0, -1, 0, 0), readScalar(PhaseFieldProperties.lookup("m_g")));
-dimensionedScalar Lg("Lg", dimensionSet(0, 0, 0, 0, 0), readScalar(PhaseFieldProperties.lookup("Lg")));
-
-dimensionedScalar m_p("m_p", dimensionSet(0, 0, -1, 0, 0), readScalar(PhaseFieldProperties.lookup("m_p")));
-dimensionedScalar Lp("Lp", dimensionSet(0, 0, 0, 0, 0), readScalar(PhaseFieldProperties.lookup("Lp")));
-dimensionedScalar Kp("Kp", dimensionSet(0, 2, -1, 0, 0), readScalar(PhaseFieldProperties.lookup("Kp")));
-*/
 
 
 dimensionedScalar gamma_pf("gamma_pf", dimensionSet(0, 0, 0, 0, 0), readScalar(PhaseFieldProperties.lookup("gamma_pf")));
@@ -38,12 +28,105 @@ dimensionedScalar Kp = (3.0/4.0)*sigma_P*lp;
 
 dimensionedScalar gasconstant("gasconstant",dimensionSet(1, 2, -2, -1, -1),scalar(8.314));
 
-// volScalarField 
-Lg = D0*Foam::exp((-Qg)/(gasconstant*T));
+
+
+
+
+
+
+
+
+
+
+
+
+//Anisotropy_Stuff
+
+
+for(label count = 0; count < N_Ori; count++)
+{
+    // if (niActive[count])
+    // {
+volScalarField& ni = PopBal[count];
+
+// Info<<rot[count]<<endl;
+
+gradi[count] = (rot2[count].R() & (((fvc::grad(ni))/(mag(fvc::grad(ni))+deltaN))));
+gradi[count].correctBoundaryConditions();
+    // }
+}
+
+
+
+for(label count = 0; count < N_Ori; count++)//find the number of non zero phases at each point in the domain
+{
+
+// if (niActive[count])
+//     {
+volScalarField n_x=(gradi[count].component(0));
+volScalarField n_y=(gradi[count].component(1));
+volScalarField n_z=(gradi[count].component(2));
+
+
+phi_Mob[count]=
+                            1.0+(Aniso_strength.value()*(
+
+
+                            (4.0*(Foam::pow(n_x,4.0)+
+                            Foam::pow(n_y,4.0)+
+                            Foam::pow(n_z,4.0)))-3.0
+                            
+                            ));
+phi_Mob[count].correctBoundaryConditions();
+    // }
+}
+
+
+
+
+
+
+numerator *=0.0;
+denominator *=0.0;
+Aniso_Mob*=0.0;
+for(label i = 0; i < N_Ori; i++)//find the number of non zero phases at each point in the domain
+{
+    // if (niActive[i])
+    // {
+
+volScalarField niav = fvc::average(PopBal[i]);
+volScalarField xiav = fvc::average(xi);
+
+numerator+=phi_Mob[i]*niav*niav*(1.0-xi)*(1.0-xi);
+denominator+=niav*niav*(1.0-xi)*(1.0-xi);
+
+    // }
+}
+
+Aniso_Mob=numerator/(denominator+deltaN2);
+
+// Aniso_Mob=max(min(Aniso_Mob,2.0),0.1);
+
+
+
+
+
+
+
+
+
+
+
+
+//Lg = D0*Foam::exp((-Qg)/(gasconstant*T));
+Lg = (GBs+Aniso_Mob)*(D0*Foam::exp((-Qg)/(gasconstant*T)))*1.0;
 
 // dimensionedScalar Lp("Lp", dimensionSet(-1, 1, 1, 0, 0), readScalar(PhaseFieldProperties.lookup("Lp")));
 
-dimensionedScalar Lp = 1.0*D0*Foam::exp((-Qg)/(gasconstant*Tliquidus1));
+// dimensionedScalar Lp = 1.0*D0*Foam::exp((-Qg)/(gasconstant*Tliquidus1));
+
+Lp = Aniso_Mob*(1.0*D0*Foam::exp((-Qg)/(gasconstant*Tliquidus1)));
+
 
 // Info<<m_p.value()<<endl;
 // Info<<m_g.value()<<endl;

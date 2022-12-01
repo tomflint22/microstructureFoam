@@ -699,7 +699,19 @@ volScalarField ErrorTrack2
     );
 
 
-
+        volScalarField Lp
+    (
+        IOobject
+        (
+            "Lp",
+            runTime.timeName(),
+            mesh,
+            IOobject::NO_READ,
+            IOobject::AUTO_WRITE
+        ),
+        mesh,
+        dimensionedScalar("Lp",dimensionSet(-1, 1, 1, 0, 0),0.0)
+    );
 
 
     IOdictionary PhaseFieldProperties
@@ -877,6 +889,181 @@ volScalarField epsilon1
 );
 
 epsilon1=1.0-xi;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+PtrList<volVectorField> gradi(N_Ori);
+
+for(label count = 0; count < N_Ori; count++)
+{
+
+    word name_gradi ("gradi." + name(count));
+
+    gradi.set
+    (
+        count,
+        new volVectorField
+        (
+            IOobject
+            (
+                name_gradi,
+                runTime.timeName(),
+                mesh,
+                IOobject::READ_IF_PRESENT,//IOobject::MUST_READ,
+                IOobject::NO_WRITE
+            ),
+            mesh,
+            dimensionedVector("gradi",dimensionSet(0, 0, 0, 0, 0),vector::zero), // NEED TO SET DIMENSIONS TO CHEM POT AFTER I DEBUG
+            // zeroGradientFvPatchVectorField::typeName
+             fixedValueFvPatchVectorField::typeName
+        )
+    );
+}
+
+
+
+Random randObjq(clock::getTime());
+
+quaternion rot2[N_Ori]={quaternion::zero};
+
+for (label i = 0; i < N_Ori; i++)
+{
+
+    scalar X0 = randObjq.scalar01();
+    scalar X1 = randObjq.scalar01();
+    scalar X2 = randObjq.scalar01();
+
+    scalar theta1 = 2*M_PI*X1;
+    scalar theta2 = 2*M_PI*X2;
+    scalar s1 = Foam::sin(theta1);
+    scalar c1 = Foam::cos(theta1);
+    scalar s2 = Foam::sin(theta2);
+    scalar c2 = Foam::cos(theta2);
+    scalar r1 = Foam::sqrt(1-X0);
+    scalar r2 = Foam::sqrt(X0);
+
+    
+    // q.normalize();
+
+    // if(mesh.nGeometricD() == 2){
+    // quaternion q(s1*r1,vector(c1*r1,s2*r2,c2*r2));
+    // rot2[i]=q;
+    // }
+
+    // else{
+    quaternion q(s1*r1,vector(c1*r1,s2*r2,c2*r2));
+    rot2[i]=q;
+    // }
+
+    // Info<<q<<endl;
+
+}
+
+
+// Info<<rot2[0]<<endl;
+// Info<<rot2[1]<<endl;
+// Info<<rot2[2]<<endl;
+
+// exit(0);
+
+
+PtrList<volScalarField> phi_Mob(N_Ori);
+
+
+    for(label count = 0; count < N_Ori; count++)
+{
+
+    word name_ni_mob ("n." + name(count)+ "mob");
+
+    phi_Mob.set
+    (
+        count,
+        new volScalarField 
+    (
+            IOobject
+            (
+                name_ni_mob,
+                runTime.timeName(),
+                mesh,
+                IOobject::READ_IF_PRESENT,//IOobject::MUST_READ,
+                IOobject::NO_WRITE
+            ),
+            mesh,
+	    dimensionedScalar("phi_Mob",dimensionSet(0, 0, 0, 0, 0),0.0),
+	    zeroGradientFvPatchScalarField::typeName
+        )
+    );
+}
+
+volScalarField numerator
+(
+    IOobject
+    (
+        "numerator",
+        runTime.timeName(),
+        mesh,
+        IOobject::READ_IF_PRESENT,
+        IOobject::NO_WRITE
+    ),
+    mesh,
+    dimensionedScalar("numerator",dimensionSet(0,0,0,0,0),0.0)
+);
+
+
+volScalarField denominator
+(
+    IOobject
+    (
+        "denominator",
+        runTime.timeName(),
+        mesh,
+        IOobject::READ_IF_PRESENT,
+        IOobject::NO_WRITE
+    ),
+    mesh,
+    dimensionedScalar("denominator",dimensionSet(0,0,0,0,0),0.0)
+);
+
+volScalarField Aniso_Mob
+(
+    IOobject
+    (
+        "Aniso_Mob",
+        runTime.timeName(),
+        mesh,
+        IOobject::READ_IF_PRESENT,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionedScalar("Aniso_Mob",dimensionSet(0,0,0,0,0),0.0)
+);
+
+dimensionedScalar lengthcorr ("lengthcorr", dimensionSet(0,1,0,0,0,0,0),1.0);
+dimensionedScalar deltaN2=lengthcorr*(1e-8/pow(average(mesh.V()), 1.0/3.0));
+
+
+
+dimensionedScalar Aniso_strength("Aniso_strength", dimensionSet(0, 0, 0, 0, 0), readScalar(PhaseFieldProperties.lookup("Aniso_strength")));
+
 
 
 
