@@ -14,33 +14,15 @@ FoamFile
     object      PhaseFieldProperties;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+V_incident	(0 1 0);//(0 1 0);//NORMALISED IN CODE
 
+HS_a 150e-6;
+HS_bg 0.0;//20
+HS_velocity 0.0;//6.0;
+HS_lg 200e-6;
+// HS_Q 156.0;//
+HS_Q 0.0;//
 
-N_Phases 3;
-
-Aniso_strength 0.5;
-
-gamma_pf	1.5;
-
-sigma_P	1.0;
-sigma_G	0.25;
-lp	1e-3;
-lg	1e-3;
-deltaf_g	0.125;
-deltaf_p	0.25;
-D0	5.0;//0.034;
-Qg	20000;//140e3;
-
-
-
-//Voronoi Tesselation Parameters
-N_Seeds 3; //used to seed the initial microstructure with tesselatefoam
-
-Xmin -0.05e-3;
-Xmax 0.05e-3;
-Ymin 2.5e-3;
-Ymax 27.5e-3;
-Zmin 0.0;
-Zmax 10e-3;
-//Voronoi Tesselation Parameters
-
+wavelength	1.070e-6;
+e_num_density	12.475e29;
+elec_resistivity	1.78e-6;
