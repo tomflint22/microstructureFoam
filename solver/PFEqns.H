@@ -35,8 +35,8 @@ dimensionedScalar gasconstant("gasconstant",dimensionSet(1, 2, -2, -1, -1),scala
 
 
 
-
-
+// Info << "Before anisotropy" << endl;
+// 
 
 
 
@@ -49,6 +49,8 @@ for(label count = 0; count < N_Ori; count++)
     {
 volScalarField& ni = PopBal[count];
 
+// Info << "max n" << count << "\t" << gMax(ni) << "\tmin: " << gMin(ni) << endl;
+
 // Info<<rot[count]<<endl;
 
 gradi[count] = (rot2[count].R() & (((fvc::grad(ni))/(mag(fvc::grad(ni))+deltaN))));
@@ -57,12 +59,13 @@ gradi[count].correctBoundaryConditions();
 }
 
 
-
 for(label count = 0; count < N_Ori; count++)//find the number of non zero phases at each point in the domain
 {
 
 if (niActive[count])
     {
+
+
 volScalarField n_x=(gradi[count].component(0));
 volScalarField n_y=(gradi[count].component(1));
 volScalarField n_z=(gradi[count].component(2));
@@ -85,7 +88,6 @@ phi_Mob[count].correctBoundaryConditions();
 
 
 
-
 numerator *=0.0;
 denominator *=0.0;
 Aniso_Mob*=0.0;
@@ -102,15 +104,8 @@ denominator+=niav*niav*(1.0-xi)*(1.0-xi);
 
     }
 }
-
 Aniso_Mob=numerator/(denominator+deltaN2);
-
 // Aniso_Mob=max(min(Aniso_Mob,2.0),0.1);
-
-
-
-
-
 
 
 

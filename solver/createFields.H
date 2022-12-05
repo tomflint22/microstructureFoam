@@ -771,16 +771,18 @@ volScalarField grainNum
 #   include "setNucleationSites.H"
 
 
+// Need to get number of tesselated fields.
+label N_Seeds(readLabel(PhaseFieldProperties.lookup("N_Seeds")));
+
 // label N_Ori(readLabel(PhaseFieldProperties.lookup("N_Phases")));
 // This will need updating here when using tesselation/initial grain structure
-label N_Ori = ni_fieldsNeeded;
-Info<<"Number of Phase Field Order Parameters: "<<N_Ori<<endl;
 
+label N_Ori = ni_fieldsNeeded + N_Seeds;
 
-
-
-
-
+Info<<"Number of Phase Field Order Parameters: "<< N_Ori << nl
+<< "\tSeeds: " << N_Seeds << nl
+<< "\tNuc Sites: " << ni_fieldsNeeded << nl
+<<endl;
 
 
 PtrList<volScalarField> PopBal(N_Ori);
@@ -812,6 +814,12 @@ PtrList<volScalarField> Sum_parts(N_Ori);
     );
 }
 //Phase Field Stuff for Non-Conserved Parameters
+
+// Check read fields
+forAll(PopBal,count){
+    volScalarField& ni = PopBal[count];
+    Info << "max n" << count << "\t" << gMax(ni) << "\tmin: " << gMin(ni) << endl;
+}
 
 
 // Melt any cells that are above liquidus
@@ -977,6 +985,38 @@ for (label i = 0; i < N_Ori; i++)
     // Info<<q<<endl;
 
 }
+
+quaternion qZero = {quaternion::zero};
+
+Info << "Creating orientation fields\n\tScalar component qw" << endl;
+volScalarField qw 
+(
+    IOobject
+    (
+        "qw",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    qZero.w()
+);
+
+// Info << "\tVector component qv" << endl;
+volVectorField qv
+(
+    IOobject
+    (
+        "qv",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    qZero.v()
+);
 
 
 // Info<<rot2[0]<<endl;

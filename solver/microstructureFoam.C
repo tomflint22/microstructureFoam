@@ -223,20 +223,44 @@ int main(int argc, char *argv[])
                 #include "pEqn.H"
             }
 
+
+
+            // List<bool> niActive (PopBal.size(),true);
+            // label nNiActive(0);
+
+            // forAll(niActive,i){
+            //     // if (gMax(PopBal[i]) < SMALL)
+            //     if (max(PopBal[i]).value() < SMALL)
+            //     {
+            //         niActive[i] = false;
+            //         nNiActive++;
+            //     }
+            // }
+
+            // Info << " Before nNiActive: " << nNiActive << endl;
+            // FatalError << abort(FatalError);
+
             #   include "nucleate.H"
+
+            // Info << "Before marking active ni" << endl;
 
             // Need to mark n.X fields that are active
             // Making a list, will make it on every MPI process, so we should use max rather than gMax
             List<bool> niActive (PopBal.size(),true);
+            label nNiActive(0);
 
             forAll(niActive,i){
                 // if (gMax(PopBal[i]) < SMALL)
+                niActive[i] = true;
                 if (max(PopBal[i]).value() < SMALL)
                 {
                     niActive[i] = false;
+                    nNiActive++;
                 }
             }
 
+            // Info << "After nNiActive: " << nNiActive << endl;
+            // FatalError << abort(FatalError);
             // forAll()
 
             #include "PFEqns.H"
@@ -254,6 +278,29 @@ int main(int argc, char *argv[])
                     }
                 }
             // }
+
+
+            // Populating orientation fields
+            if (runTime.writeTime())
+            {
+                forAll(qw,i){
+                    label gn = grainNum[i];
+                    
+                    if (gn < 0)
+                    {
+                        qw[i] = qZero.w();
+                        qv[i] = qZero.v();
+                    }
+
+                    else{
+                        qw[i] = rot2[gn].w();
+                        qv[i] = rot2[gn].v();
+                    }
+                    
+                }
+            }
+
+
 
             if (pimple.turbCorr())
             {
