@@ -875,7 +875,7 @@ for(label count = 0; count < N_Ori; count++)
                 runTime.timeName(),
                 mesh,
                 IOobject::READ_IF_PRESENT,//IOobject::MUST_READ,
-                IOobject::AUTO_WRITE
+                IOobject::NO_WRITE
             ),
             mesh,
             dimensionedVector("gradi",dimensionSet(0, 0, 0, 0, 0),vector::zero), // NEED TO SET DIMENSIONS TO CHEM POT AFTER I DEBUG
@@ -980,7 +980,7 @@ PtrList<volScalarField> phi_Mob(N_Ori);
                 runTime.timeName(),
                 mesh,
                 IOobject::READ_IF_PRESENT,//IOobject::MUST_READ,
-                IOobject::AUTO_WRITE
+                IOobject::NO_WRITE
             ),
             mesh,
 	    dimensionedScalar("phi_Mob",dimensionSet(0, 0, 0, 0, 0),0.0),

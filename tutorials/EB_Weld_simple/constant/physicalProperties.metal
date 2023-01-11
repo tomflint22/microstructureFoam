@@ -18,14 +18,14 @@ viscosityModel  constant;
 
 nu              2.5e-06;
 
-rho             7966;
+rho             8000;
 
     cp  600;
     cpsolid 600.0;
     kappa  28.0;
 	kappasolid  26.0; 
-	Tsolidus 1613;
-	Tliquidus 1623.15;
+	Tsolidus 1658;
+	Tliquidus 1723;
     LatentHeat 2.5e5;
     beta    2.0e-5;
 
