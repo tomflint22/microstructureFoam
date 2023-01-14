@@ -38,7 +38,7 @@ regions
 
      boxToCell
      {
-         box (-1 2.501e-3 3e-3) (1 27.501e-3 7e-3);
+         box (-1 2.501e-3 2.5e-3) (1 27.501e-3 7.5e-3);
          fieldValues
          (
      volScalarFieldValue T 1800
