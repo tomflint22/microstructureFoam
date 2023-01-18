@@ -18,7 +18,7 @@ FoamFile
 Tu_mean		Tu_mean [0 0 0 1 0 0 0] 1.0;
 Tu_stdev	Tu_stdev [0 0 0 1 0 0 0] 0.5;
 
-n_max		n_max [0 -3 0 0 0 0 0] 1e22;
+n_max		n_max [0 -3 0 0 0 0 0] 1e21;
 
 xiThreshold	0.1;
 

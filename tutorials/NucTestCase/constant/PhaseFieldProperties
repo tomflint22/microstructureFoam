@@ -18,6 +18,8 @@ FoamFile
 
 N_Phases 20;
 
+Aniso_strength	0.0;
+
 //Kg	0.225e-6;
 gamma_pf	1.5;
 //m_g	450000;
@@ -29,8 +31,8 @@ gamma_pf	1.5;
 
 sigma_P	1.0;
 sigma_G	0.25;
-lp	2e-6;
-lg	2e-6;
+lp	1e-5;
+lg	1e-5;
 deltaf_g	0.125;
 deltaf_p	0.25;
 D0	1.5;//0.034;
