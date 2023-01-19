@@ -46,7 +46,15 @@ regions
          );
      }
 
-
+     boxToCell
+     {
+         box (-1 2.501e-3 0.0e-3) (1 6.501e-3 10.0e-3);
+         fieldValues
+         (
+     volScalarFieldValue T 1800
+ volScalarFieldValue xi 0.0
+         );
+     }
 
 );
 
