@@ -28,6 +28,14 @@ type zeroGradient;
     {
 type zeroGradient;
     }
+        leftWall
+    {
+        type            zeroGradient;
+    }
+    rightWall
+    {
+        type            zeroGradient;
+    }
 
     atmosphere
     {

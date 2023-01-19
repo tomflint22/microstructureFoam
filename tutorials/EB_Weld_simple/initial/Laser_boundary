@@ -30,6 +30,16 @@ value uniform -1.0;
 type fixedValue;
 value uniform -1.0;
     }
+        leftWall
+    {
+type fixedValue;
+value uniform -1.0;
+    }
+    rightWall
+    {
+type fixedValue;
+value uniform -1.0;
+    }
 
     atmosphere
     {

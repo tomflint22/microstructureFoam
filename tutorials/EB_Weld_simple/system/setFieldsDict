@@ -36,17 +36,33 @@ regions
          );
      }
 
-     boxToCell
-     {
-         box (-1 2.501e-3 2.5e-3) (1 27.501e-3 7.5e-3);
-         fieldValues
-         (
+
+     
+     
+     
+     cylinderToCell
+{
+p1 	 (0.0 	 0.0 	 0.0);
+p2 	 (0.0 	 30.0e-3 	 0.0);
+radius 4e-3;
+fieldValues
+(
      volScalarFieldValue T 1800
  volScalarFieldValue xi 0.0
-         );
-     }
+);
+}
 
-
+     cylinderToCell
+{
+p1 	 (0.0 	 0.0 	 0.0);
+p2 	 (0.0 	 7.501e-3 	 0.0);
+radius 6e-3;
+fieldValues
+(
+     volScalarFieldValue T 1800
+ volScalarFieldValue xi 0.0
+);
+}
 
 );
 

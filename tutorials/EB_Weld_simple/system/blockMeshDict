@@ -20,21 +20,21 @@ vertices//defines the points that bound the mesh
 (
 
 
-    (-0.05 0 -10)//0
-    (0.05 0 -10)//1
-    (0.05 30 -10)//2
-    (-0.05 30 -10)//3
-    (-0.05 0 20)//4
-    (0.05 0 20)//5
-    (0.05 30 20)//6
-    (-0.05 30 20)//7
+    (-15 0 -15)//0
+    (15 0 -15)//1
+    (15 30 -15)//2
+    (-15 30 -15)//3
+    (-15 0 15)//4
+    (15 0 15)//5
+    (15 30 15)//6
+    (-15 30 15)//7
 
 
 
 );
 blocks
 (
-    hex (0 1 2 3 4 5 6 7) (1 300 300) simpleGrading (1 1 1)		//REGION 1
+    hex (0 1 2 3 4 5 6 7) (200 200 200) simpleGrading (1 1 1)		//REGION 1
 
 
 
@@ -67,7 +67,7 @@ boundary
     }
     rightWall
     {
-        type empty;
+        type patch;
         faces
         (
             (1 2 6 5)
@@ -76,7 +76,7 @@ boundary
     }
     leftWall
     {
-        type empty;
+        type patch;
         faces
         (
             (0 4 7 3)

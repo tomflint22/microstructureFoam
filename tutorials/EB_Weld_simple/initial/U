@@ -29,6 +29,14 @@ boundaryField
         type            slip;
 
     }
+        leftWall
+    {
+        type            slip;
+    }
+    rightWall
+    {
+        type            slip;
+    }
     atmosphere
     {
 type pressureInletOutletVelocity;

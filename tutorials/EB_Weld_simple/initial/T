@@ -30,18 +30,21 @@ type zeroGradient;
         type fixedValue;
         value uniform 300.0;
     }
+        leftWall
+    {
+        type            zeroGradient;
+    }
+    rightWall
+    {
+        type            zeroGradient;
+    }
 
     atmosphere
     {
 type zeroGradient;
     }
 
-    leftWall{
-         type empty;
-    }
-    rightWall{
-         type empty;
-    }
+
 }
 
 // ************************************************************************* //

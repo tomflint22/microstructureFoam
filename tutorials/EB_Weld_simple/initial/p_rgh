@@ -30,6 +30,16 @@ boundaryField
         type            fixedFluxPressure;
         value           uniform 0;
     }
+        leftWall
+    {
+        type            fixedFluxPressure;
+        value           uniform 0;
+    }
+    rightWall
+    {
+        type            fixedFluxPressure;
+        value           uniform 0;
+    }
 
     atmosphere
     {
