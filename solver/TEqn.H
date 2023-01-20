@@ -13,8 +13,12 @@
     {
         iter++;
         epsilon1.storePrevIter();
+
+        const volScalarField epsilon1_mod(epsilon1*alpha1);
+
+
         // T.storePrevIter();
-        TRHS = LatentHeat*((fvc::ddt(rho,epsilon1) + fvc::div(rhoPhi, epsilon1)));
+        TRHS = LatentHeat*((fvc::ddt(rho,epsilon1_mod) + fvc::div(rhoPhi, epsilon1_mod)));
         // TRHS = LatentHeat*rho*ddte1;//((fvc::ddt(rho,epsilon1) + fvc::div(rhoPhi, epsilon1)));
 
         // ddte1
