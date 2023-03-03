@@ -28,7 +28,7 @@ gamma_pf	1.5;
 //Lp	0.5;
 //Kp	1.5e-6;
 
-
+grainNumThreshold 1e-6;
 sigma_P	1.0;
 sigma_G	0.25;
 // lp  2e-6;

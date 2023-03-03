@@ -744,6 +744,8 @@ Info<<"Number of Phase Field Order Parameters: "<< N_Ori << nl
 
 Info<<"Number of Phase Field Order Parameters: "<<N_Ori<<endl;
 
+// abort();
+
 
 
 
@@ -806,6 +808,57 @@ forAll( mesh.C(), celli)
     }
     xi[celli] = 0.0; // TOM: Should this be included
 }
+
+volScalarField grainNum
+(
+    IOobject
+    (
+        "grainNum",
+        runTime.timeName(),
+        mesh,
+        IOobject::READ_IF_PRESENT,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionedScalar("grainNum",dimensionSet(0, 0, 0, 0, 0),-1.0),
+    zeroGradientFvPatchScalarField::typeName
+);
+
+volScalarField maxNiVal
+(
+    IOobject
+    (
+        "maxNiVal",
+        runTime.timeName(),
+        mesh,
+        IOobject::READ_IF_PRESENT,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionedScalar("maxNiVal",dimensionSet(0, 0, 0, 0, 0),0.0),
+    zeroGradientFvPatchScalarField::typeName
+);
+
+scalar grainNumThreshold( readScalar(PhaseFieldProperties.lookup("grainNumThreshold")));
+
+
+// Set grain num field to indicate which field occupies the cell
+grainNum = -1; // Assume that no grains occupy any cell
+maxNiVal = 0;
+
+forAll(grainNum,i){
+    forAll(PopBal,j){
+        if(
+            (PopBal[j][i] > grainNumThreshold)
+        &&  (PopBal[j][i] > maxNiVal[i])
+        )
+        {
+            maxNiVal[i] = i;
+            grainNum[i] = j;
+        }   
+    }
+}
+
 
 // Get max field number that currently exists
 label maxNiIndex(-1);

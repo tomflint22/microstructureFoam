@@ -1,9 +1,4 @@
-
-// Pout << "Proc " << Pstream::myProcNo()<<  "\tStart of PFEqns.H" << endl;
-//     int dummy;
-//     Pstream::scatter(dummy);
-// {
-
+{
 /*
 dimensionedScalar Kg("Kg", dimensionSet(0, 2, -1, 0, 0), readScalar(PhaseFieldProperties.lookup("Kg")));
 dimensionedScalar gamma_pf("gamma_pf", dimensionSet(0, 0, 0, 0, 0), readScalar(PhaseFieldProperties.lookup("gamma_pf")));
@@ -66,50 +61,53 @@ Lp = Aniso_Mob*(1.0*D0*Foam::exp((-Qg)/(gasconstant*T)));
 // Info<<deltaf_p.value()<<endl;
 
 
-    // int dummy;
-    // Pstream::scatter(dummy);
-    Info << "Before Sum_Phases" << endl;
-
-Info << "nProcs: " << Pstream::nProcs() << endl;
-
 Sum_Phases*=0.0;
 GBs*=0.0;
 
 for(label count = 0; count < N_Ori; count++)
 {
-    volScalarField& ni = PopBal[count];
-    GBs+=ni*ni;
-
-    volScalarField test12 = (ni*ni*ni) - ni + 2.0*ni*(1.0-xi)*(1.0-xi);
-
-    Sum_Phases+=ni;
-    // volScalarField test12addition = 0.0*ni;//NEED TO SET THIS TO ZERO BETTER
-    for(label count2 = 0; count2 < N_Ori; count2++)
+    if (niActive[count])
     {
-        if(count != count2){
-            volScalarField& nj = PopBal[count2];
-            // test12addition += nj*nj;
-            test12+=2.0*gamma_pf*ni*nj*nj;
-        }
-    }
-    // test12+=2.0*gamma_pf*ni*test12addition;
+        volScalarField& ni = PopBal[count];
+        GBs+=ni*ni;
 
-    Sum_parts.set(count,new volScalarField(test12));//
-        // volScalarField& Su=Sum_parts[count];
+        volScalarField test12 = (ni*ni*ni) - ni + 2.0*ni*(1.0-xi)*(1.0-xi);
+
+        Sum_Phases+=ni;
+        // volScalarField test12addition = 0.0*ni;//NEED TO SET THIS TO ZERO BETTER
+        for(label count2 = 0; count2 < N_Ori; count2++)
+        {
+            if (niActive[count2])
+            {
+                if(count != count2){
+                    volScalarField& nj = PopBal[count2];
+                    // test12addition += nj*nj;
+                    test12+=2.0*gamma_pf*ni*nj*nj;
+                }
+            }
+        }
+        // test12+=2.0*gamma_pf*ni*test12addition;
+
+        Sum_parts.set(count,new volScalarField(test12));//
+            // volScalarField& Su=Sum_parts[count];
+    }
 }
 
 for(label count = 0; count < N_Ori; count++)
 {
-    volScalarField& ni = PopBal[count];
-    volScalarField& Su=Sum_parts[count];
-    
-    solve
-    (
-        fvm::ddt(ni) 
-    ==
-        -Lg*m_g*Su
-        +Lg*fvm::laplacian(Kg,ni)
-    );
+    if (niActive[count])
+    {
+        volScalarField& ni = PopBal[count];
+        volScalarField& Su=Sum_parts[count];
+        
+        solve
+        (
+            fvm::ddt(ni) 
+        ==
+            -Lg*m_g*Su
+            +Lg*fvm::laplacian(Kg,ni)
+        );
+    }
 }
 
 phi_PF=0.5*(1.0-(Foam::tanh(1e5*((T/TLiquidus)-1.0))));
@@ -122,4 +120,4 @@ solve
     +Lp*fvm::laplacian(Kp,xi)
 );
 
-// }
+}

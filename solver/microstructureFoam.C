@@ -213,9 +213,21 @@ int main(int argc, char *argv[])
 
             #   include "nucleate.H"
 
-            // Can we get to here reliably?
-            int dummy;
-            Pstream::scatter(dummy);
+            // Need to mark n.X fields that are active
+            // Making a list, will make it on every MPI process, so we should use max rather than gMax
+            List<bool> niActive (PopBal.size(),true);
+            label nNiActive(0);
+
+            forAll(niActive,i){
+                niActive[i] = true;
+                if (max(PopBal[i]).value() < SMALL)
+                {
+                    niActive[i] = false;
+                    nNiActive++;
+                }
+            }
+
+            Info << "Number of active ni fields: " << nNiActive << " out of " << PopBal.size() << endl;
 
             #include "PFEqns.H"
 
@@ -224,6 +236,46 @@ int main(int argc, char *argv[])
             if (pimple.turbCorr())
             {
                 turbulence.correct();
+            }
+        }
+
+        if (runTime.writeTime())
+        {
+            //- Set grainNum field to indicate which field occupies the cell
+            grainNum = -1; // Assume that no grains occupy any cell
+            maxNiVal = 0;
+
+            forAll(grainNum,i){
+                forAll(PopBal,j){
+                    if(
+                        (PopBal[j][i] > grainNumThreshold)
+                    &&  (PopBal[j][i] > maxNiVal[i])
+                    )
+                    {
+                        maxNiVal[i] = i;
+                        grainNum[i] = j;
+                    }   
+                }
+            }
+
+            //- Populate orientation fields
+            if (runTime.writeTime())
+            {
+                forAll(qw,i){
+                    label gn = grainNum[i];
+                    
+                    if (gn < 0)
+                    {   
+                        qw[i] = qZero.w();
+                        qv[i] = qZero.v();
+                    }
+
+                    else{
+                        qw[i] = rot2[gn].w();
+                        qv[i] = rot2[gn].v();
+                    }
+                    
+                }
             }
         }
 

@@ -95,7 +95,6 @@ Pout << "Proc " << Pstream::myProcNo() << "\tnNuc: " << numSitesToBeNuced << "\t
 // Need a for loop to cycle through processors
 // When nucleating 
 
-int nNewFields = 0;
 reduce(maxNiIndex, maxOp<label>());
 
 label nProcs = Pstream:: nProcs();
