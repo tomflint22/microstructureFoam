@@ -1,0 +1,125 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  10
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant/polyMesh";
+    object      blockMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+//- This an m4 script use to generate a blockMeshDict using:
+// m4 THIS_FILE_NAME.m4 > blockMeshDict
+
+// Setup m4 stuff
+
+
+
+// define geometry in m
+  // X length
+ // Y length
+ // Z length
+
+ // common number of divisions
+
+ // divs in x
+ // divs in y
+
+// start of blockMeshDict
+
+convertToMeters 1;
+
+vertices
+(
+    // Front
+	(0 0 0)                	// 0
+	(1e-3 0 0)			// 1
+	(1e-3 1e-3 0)			// 2
+	(0 1e-3 0)			// 3	
+
+    // Back
+	(0 0 1e-6)                	// 4
+	(1e-3 0 1e-6)			// 5
+	(1e-3 1e-3 1e-6)			// 6
+	(0 1e-3 1e-6)			// 7
+);
+
+blocks
+(
+    hex (0 1 2 3 4 5 6 7) (100 100 1) simpleGrading (1 1 1)
+);
+
+edges
+(
+);
+
+
+boundary
+(
+	frontAndBack
+	{
+		type empty;
+		faces
+		(
+			(0 1 2 3)
+		);
+	}
+
+	back
+	{
+		type empty;
+		faces
+		(
+      		(4 5 6 7)
+		);
+	}
+	
+	left
+	{
+		type wall;
+		faces
+		(
+			(0 4 7 3)
+		);
+	}
+	
+	bottom
+	{
+		type wall;
+		faces
+		(
+			(0 1 5 4)
+		);
+	}
+	
+	right
+	{
+		// type wall;
+		type zeroGradient;
+		faces
+		(
+			(1 5 6 2)
+		);
+	}
+	
+	top
+	{
+		// type wall;
+		type zeroGradient;
+		faces
+		(
+			(3 2 6 7)
+		);
+	}	
+);
+
+mergePatchPairs
+(
+);

@@ -53,6 +53,7 @@ Description
 #include "findLocalCell.H"
 
 #include "quaternion.H"
+#include <random>
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -210,7 +211,15 @@ int main(int argc, char *argv[])
                 #include "pEqn.H"
             }
 
+            #   include "nucleate.H"
+
+            // Can we get to here reliably?
+            int dummy;
+            Pstream::scatter(dummy);
+
             #include "PFEqns.H"
+
+            // FatalError << "PFEqns complete" << abort(FatalError);
 
             if (pimple.turbCorr())
             {

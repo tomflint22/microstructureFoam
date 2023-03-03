@@ -260,6 +260,20 @@ volScalarField TLiquidus
 );
 TLiquidus=alpha1*Tliquidus1 + (1.0-alpha1)*Tliquidus2;
 
+volScalarField Tu
+(
+    IOobject
+    (
+        "Tu",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    T - TLiquidus
+);
+
+
 volScalarField DC
 (
     IOobject
@@ -715,8 +729,18 @@ volScalarField ErrorTrack2
         )
     );
 
+#   include "setNucleationSites.H"
+// This will set ni_fieldsNeeded to the number of nucleation sites assigned.
 
-label N_Ori(readLabel(PhaseFieldProperties.lookup("N_Phases")));
+// label N_Ori(readLabel(PhaseFieldProperties.lookup("N_Phases")));
+    // Need to get number of tesselated fields.
+label N_Seeds(readLabel(PhaseFieldProperties.lookup("N_Seeds")));
+label N_Ori = ni_fieldsNeeded + N_Seeds;
+
+Info<<"Number of Phase Field Order Parameters: "<< N_Ori << nl
+<< "\tSeeds: " << N_Seeds << nl
+<< "\tNuc Sites: " << ni_fieldsNeeded << nl
+<<endl;
 
 Info<<"Number of Phase Field Order Parameters: "<<N_Ori<<endl;
 
@@ -754,51 +778,69 @@ PtrList<volScalarField> Sum_parts(N_Ori);
     );
 }
 //Phase Field Stuff for Non-Conserved Parameters
-
-
-
-    forAll( mesh.C(), celli)
-{
-
-if(T[celli]>TLiquidus[celli]){
-
-for(label count = 0; count < N_Ori; count++)
-{
-PopBal[count][celli] = 0.0;
-}
-}
-
-}
-
-    volScalarField xi
+volScalarField xi
+(
+    IOobject
     (
-        IOobject
-        (
-            "xi",
-            runTime.timeName(),
-            mesh,
-            IOobject::READ_IF_PRESENT,
-            IOobject::AUTO_WRITE
-        ),
+        "xi",
+        runTime.timeName(),
         mesh,
-	    dimensionedScalar("xi",dimensionSet(0, 0, 0, 0, 0),0.0),
-	    zeroGradientFvPatchScalarField::typeName
-    );
+        IOobject::READ_IF_PRESENT,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionedScalar("xi",dimensionSet(0, 0, 0, 0, 0),0.0),
+    zeroGradientFvPatchScalarField::typeName
+);
 // xi.write();
 
-        volScalarField phi_PF
+// Melt any cells above liquidus
+forAll( mesh.C(), celli)
+{
+    if(T[celli]>TLiquidus[celli])
+    {
+        for(label count = 0; count < N_Ori; count++)
+        {
+            PopBal[count][celli] = 0.0;
+        }
+    }
+    xi[celli] = 0.0; // TOM: Should this be included
+}
+
+// Get max field number that currently exists
+label maxNiIndex(-1);
+
+forAll(PopBal,i){
+    volScalarField& ni = PopBal[i];
+    scalar maxVal = gMax(ni);
+    Info << "PopBal[" <<i << "] max = " << maxVal << endl;
+    if (maxVal > SMALL){ // field is non-zero
+        // ni_active[i] = true; // turn on writing of field
+        if (i > maxNiIndex)
+        {
+            maxNiIndex = i;
+        }
+    }
+}
+
+// the maxNiIndex that was found was specific to the processor
+// Find the global maxNiIndex by maxOp
+reduce(maxNiIndex,maxOp<label>());
+
+
+volScalarField phi_PF
+(
+    IOobject
     (
-        IOobject
-        (
-            "phi_PF",
-            runTime.timeName(),
-            mesh,
-            IOobject::NO_READ,
-            IOobject::AUTO_WRITE
-        ),
+        "phi_PF",
+        runTime.timeName(),
         mesh,
-        dimensionedScalar("phi_PF",dimensionSet(0, 0, 0, 0, 0),0.0)
-    );
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionedScalar("phi_PF",dimensionSet(0, 0, 0, 0, 0),0.0)
+);
 
 volScalarField epsilon1
 (
@@ -815,10 +857,6 @@ volScalarField epsilon1
 );
 
 epsilon1=1.0-xi;
-
-
-
-
 
 Random randObj2(clock::getTime());
 
@@ -953,6 +991,37 @@ for (label i = 0; i < N_Ori; i++)
 
 }
 
+quaternion qZero = {quaternion::zero};
+
+Info << "Creating orientation fields\n\tScalar component qw" << endl;
+volScalarField qw 
+(
+    IOobject
+    (
+        "qw",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    qZero.w()
+);
+
+// Info << "\tVector component qv" << endl;
+volVectorField qv
+(
+    IOobject
+    (
+        "qv",
+        runTime.timeName(),
+        mesh,
+        IOobject::NO_READ,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    qZero.v()
+);
 
 // Info<<rot2[0]<<endl;
 // Info<<rot2[1]<<endl;
