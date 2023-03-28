@@ -64,15 +64,37 @@ Info << "\tSUM OP nCells: " << totalCellsGlobal << endl;
 // Total possible number of nuc sites is meshVolume * n_max
 scalar N_maxScalar ( n_max.value() * meshVolume);
 
-int N_max = int(N_maxScalar);
+Info << "Before inting N_max: " << N_maxScalar 
+<< "\tINT_MAX = " << INT_MAX 
+<< "\t(" << 100.0*(N_maxScalar/INT_MAX) << " %)" 
+<< endl;
 
-Info << "\tN_max: " << N_max << endl;
+if (N_maxScalar > INT_MAX)
+{
+    FatalError << "Total number of potential nucleation sites ("<<N_maxScalar <<")"
+    << " exceeds maximum integer possible (" << INT_MAX 
+    << ") [" << 100.0*(N_maxScalar/INT_MAX) << " %]" 
+    << abort(FatalError);
+}
+
+if (N_maxScalar > totalCellsGlobal)
+{
+    FatalError << "Total number of potential nucleation sites ("<<N_maxScalar <<")"
+    << " exceeds number of cells in the mesh (" << totalCellsGlobal 
+    << ") [" << 100.0*(N_maxScalar/totalCellsGlobal) << " %]" 
+    << abort(FatalError);
+}
+
+int N_max (N_maxScalar);
+
+
+Info << "After inting N_max: " << N_max << endl;
 
 // Proportion of sites that can nucleate
 scalar pSite = scalar(N_max) / totalCellsGlobal;
 
 Info << "Total mesh volume: " << meshVolume 
-<< "\tn_max: " << n_max << " sites/m2" 
+<< "\tn_max: " << n_max << " sites/m3" 
 << "\tN_max: " << N_max << " sites (" << pSite * 100.0 << "%% of cells)" 
 << endl;
 
@@ -309,6 +331,10 @@ volScalarField nucSiteProc
 );
 
 
+int numNucSitesSet(0);
+int numNucTuZero(0);
+scalar totalTu(0);
+
 //- List of nuc centres is now distributed to all processors
 //	Need to find the cell centres that closest match these
 if (nucCentres.size() > 0)
@@ -355,7 +381,7 @@ if (nucCentres.size() > 0)
 	        }
 	    }
 	}
-}
+// } // Moving if to only set sites if N_max != 0
 
 // int dummy;
 // Pstream::scatter(dummy);
@@ -367,9 +393,9 @@ Info << "Setting nucleation undercoolings for:\n"
 << "\tst dev:\t" << Tu_stdev.value() << endl
 << "\tmean:\t" << Tu_mean.value() << endl;
 
-int numNucSitesSet(0);
-int numNucTuZero(0);
-scalar totalTu(0);
+// int numNucSitesSet(0);
+// int numNucTuZero(0);
+// scalar totalTu(0);
 
 
 // Gaussian distribution - for assignment of nucTu
@@ -405,11 +431,16 @@ forAll(nucTu,i){
         numNucSitesSet++;
     }
 }
+}
 
 reduce(totalTu,sumOp<scalar>());
 reduce(numNucSitesSet,sumOp<int>());
 
-scalar avgNucTu = totalTu / numNucSitesSet;
+scalar avgNucTu(0);
+if (numNucSitesSet > 0)
+{
+    avgNucTu = totalTu / numNucSitesSet;
+}
 Info << "numNucSitesSet: " << numNucSitesSet << "\tN_max: " << N_max << endl;
 Info << "nucTu max: " << gMax(nucTu) << "\tmin: "<< gMin(nucTu) << "\tavg: " << avgNucTu<< "\tzero: " << numNucTuZero << endl;
 
