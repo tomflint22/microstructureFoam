@@ -203,6 +203,11 @@ List<vector> nucCentres (N_max,vector(0,0,0));
 List<bool> nucSet (N_max,false);
 int nSet = 0;
 
+scalar maxItersNucSet // how many interface thicknesses each nuc site should be from each other
+(
+    readScalar(nucleationDict.lookup("maxItersNucSet"))
+);
+
 Info << "Generating list of nucleation site locations" << endl;
 // Do it in serial on the master processor, then sync to others
 if (Pstream::master)
@@ -270,14 +275,14 @@ if (Pstream::master)
 
             iters++;
             // Info << "i = " << i << "\titer: " << iters << "\tP = " <<  nucCentres[i] << endl;
-            int maxIters = 1e3;
-            if (iters > maxIters)
+            // int maxIters = 1e3;
+            if (iters > maxItersNucSet)
             {
-                FatalError << "Setting nucleation sites failed. " <<iters <<" iters taken " << abort(FatalError);
+                FatalError << "Setting nucleation sites failed. " <<iters <<" iters taken (max = " << maxItersNucSet << ")" << abort(FatalError);
             }
         } while (nucOK == false); // keep trying until a valid site is found
 
-        Info << "nucCentre[" << i << "]: " << nucC << "\titers: " << iters << endl;
+        Info << "site[" << i << "] (" << 100.0*scalar(i)/scalar(nucCentres.size()) <<"%): " << nucC << "\titers: " << iters << endl;
     }
     Info << "Number of nucleations site set: " << nSet << " (N_max = " << N_max << ")" << endl;
     // Check if all nucleation sites have been set
@@ -446,6 +451,18 @@ Info << "nucTu max: " << gMax(nucTu) << "\tmin: "<< gMin(nucTu) << "\tavg: " << 
 
 
 Info << "\n\tSETTING OF NUCLEATION SITES COMPLETE" << nl << endl;
+
+
+Switch stopToCheckNucSites
+(
+    nucleationDict.lookup("stopToCheckNucSites")
+);
+if (stopToCheckNucSites)
+{
+    nucTu.write();
+    Info << "Stopping run to check nucleation sites (nucTu)" << endl;
+    abort();
+}
 // nucTu.write();
 
 // abort();

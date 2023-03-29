@@ -1,0 +1,8 @@
+#!/bin/sh
+
+rm -r 0
+cp -r initial 0
+blockMesh
+setFields
+TesselateFoam
+microstructureFoam

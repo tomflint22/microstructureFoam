@@ -16,7 +16,7 @@ dimensionedScalar gamma_pf("gamma_pf", dimensionSet(0, 0, 0, 0, 0), readScalar(P
 dimensionedScalar sigma_P("sigma_P", dimensionSet(1, 0, -2, 0, 0),readScalar(PhaseFieldProperties.lookup("sigma_P")));
 dimensionedScalar sigma_G("sigma_G", dimensionSet(1, 0, -2, 0, 0),readScalar(PhaseFieldProperties.lookup("sigma_G")));
 dimensionedScalar lp("lp", dimensionSet(0, 1, 0, 0, 0),readScalar(PhaseFieldProperties.lookup("lp")));
-// dimensionedScalar lg("lg", dimensionSet(0, 1, 0, 0, 0),readScalar(PhaseFieldProperties.lookup("lg")));
+dimensionedScalar lg("lg", dimensionSet(0, 1, 0, 0, 0),readScalar(PhaseFieldProperties.lookup("lg")));
 
 dimensionedScalar deltaf_g("deltaf_g", dimensionSet(0, 0, 0, 0, 0),readScalar(PhaseFieldProperties.lookup("deltaf_g")));
 dimensionedScalar deltaf_p("deltaf_p", dimensionSet(0, 0, 0, 0, 0),readScalar(PhaseFieldProperties.lookup("deltaf_p")));
@@ -60,7 +60,7 @@ Lp = Aniso_Mob*(1.0*D0*Foam::exp((-Qg)/(gasconstant*T)));
 // Info<<deltaf_g.value()<<endl;
 // Info<<deltaf_p.value()<<endl;
 
-
+Info << "Before sum phases " << endl;
 Sum_Phases*=0.0;
 GBs*=0.0;
 
@@ -93,6 +93,8 @@ for(label count = 0; count < N_Ori; count++)
     }
 }
 
+Info << "Before solveNi " << endl;
+
 for(label count = 0; count < N_Ori; count++)
 {
     if (niActive[count])
@@ -111,6 +113,8 @@ for(label count = 0; count < N_Ori; count++)
 }
 
 phi_PF=0.5*(1.0-(Foam::tanh(1e5*((T/TLiquidus)-1.0))));
+
+Info << "Before solve xi " << endl;
 
 solve
 (
