@@ -796,18 +796,18 @@ volScalarField xi
 );
 // xi.write();
 
-// Melt any cells above liquidus
-forAll( mesh.C(), celli)
-{
-    if(T[celli]>TLiquidus[celli])
-    {
-        for(label count = 0; count < N_Ori; count++)
-        {
-            PopBal[count][celli] = 0.0;
-        }
-    }
-    xi[celli] = 0.0; // TOM: Should this be included
-}
+// // Melt any cells above liquidus
+// forAll( mesh.C(), celli)
+// {
+//     if(T[celli]>TLiquidus[celli])
+//     {
+//         for(label count = 0; count < N_Ori; count++)
+//         {
+//             PopBal[count][celli] = 0.0;
+//         }
+//     }
+//     xi[celli] = 0.0; // TOM: Should this be included
+// }
 
 volScalarField grainNum
 (
