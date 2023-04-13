@@ -1,3 +1,4 @@
+
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | foam-extend: Open Source CFD
@@ -7,31 +8,22 @@
 -------------------------------------------------------------------------------
 License
     This file is part of foam-extend.
-
     foam-extend is free software: you can redistribute it and/or modify it
     under the terms of the GNU General Public License as published by the
     Free Software Foundation, either version 3 of the License, or (at your
     option) any later version.
-
     foam-extend is distributed in the hope that it will be useful, but
     WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
     General Public License for more details.
-
     You should have received a copy of the GNU General Public License
     along with foam-extend.  If not, see <http://www.gnu.org/licenses/>.
-
 Application
     VoronoiFoam
-
 Description
     Utility to Set Phase Fields Using Voronoi Tesselation
-
 Author
 	Tom Flint
-	Danny Dreelan
-
-
 \*---------------------------------------------------------------------------*/
 
 #include "fvCFD.H"
@@ -88,13 +80,15 @@ int main(int argc, char *argv[])
 //label N_Ori(readLabel(PhaseFieldProperties.lookup("N_Phases")));
 label N_Seeds(readLabel(PhaseFieldProperties.lookup("N_Seeds")));
 
-Info<<"Number of Seeds: "<<N_Seeds<<endl;
+label N_Ori = N_Seeds+1;
+
+Info<<"Number of SEEDS: "<<N_Seeds<<endl;
 
 
 
-PtrList<volScalarField> PopBal(N_Seeds);
+PtrList<volScalarField> PopBal(N_Ori);
 
-    for(label count = 0; count < N_Seeds; count++)
+    for(label count = 0; count < N_Ori; count++)
 {
 
     word name_ni ("n." + name(count));
@@ -166,23 +160,19 @@ PopBal[K][celli]=1.0;
 
 
 
-for(label count = 0; count < N_Seeds; count++)//find the number of non zero phases at each point in the domain
+for(label count = 0; count < N_Ori; count++)//find the number of non zero phases at each point in the domain
 {
 PopBal[count].write();
 }
 /*
 double r,rx,ry,rz;
-
     for (int i=0; i<nodes(GRID); i++) {
 vector<int> x = position(GRID,i);
 GRID_MELTTRACK(i)[0]=0.0;
-
 if(con.find_voronoi_cell(x[0],x[1],x[2],rx,ry,rz,K)){
 GRID[x[0]][x[1]][x[2]][K/N_coincident_phases]=1.0;
 }
-
 }
-
 */
 
 // Populate grainNum field
@@ -238,5 +228,3 @@ grainNum.write();
 #include "./Voronoi/src/voro++.cc"
 
 // ************************************************************************* //
-
-
