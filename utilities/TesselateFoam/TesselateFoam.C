@@ -29,6 +29,7 @@ Description
 
 Author
 	Tom Flint
+	Danny Dreelan
 
 
 \*---------------------------------------------------------------------------*/
@@ -84,16 +85,16 @@ int main(int argc, char *argv[])
     );
 
 
-label N_Ori(readLabel(PhaseFieldProperties.lookup("N_Phases")));
+//label N_Ori(readLabel(PhaseFieldProperties.lookup("N_Phases")));
 label N_Seeds(readLabel(PhaseFieldProperties.lookup("N_Seeds")));
 
-Info<<"Number of Phase Field Order Parameters: "<<N_Ori<<endl;
+Info<<"Number of Seeds: "<<N_Seeds<<endl;
 
 
 
-PtrList<volScalarField> PopBal(N_Ori);
+PtrList<volScalarField> PopBal(N_Seeds);
 
-    for(label count = 0; count < N_Ori; count++)
+    for(label count = 0; count < N_Seeds; count++)
 {
 
     word name_ni ("n." + name(count));
@@ -165,7 +166,7 @@ PopBal[K][celli]=1.0;
 
 
 
-for(label count = 0; count < N_Ori; count++)//find the number of non zero phases at each point in the domain
+for(label count = 0; count < N_Seeds; count++)//find the number of non zero phases at each point in the domain
 {
 PopBal[count].write();
 }
@@ -184,19 +185,50 @@ GRID[x[0]][x[1]][x[2]][K/N_coincident_phases]=1.0;
 
 */
 
+// Populate grainNum field
+volScalarField grainNum
+(
+    IOobject
+    (
+        "grainNum",
+        runTime.timeName(),
+        mesh,
+        IOobject::READ_IF_PRESENT,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionedScalar("grainNum",dimensionSet(0, 0, 0, 0, 0),-1.0),
+    zeroGradientFvPatchScalarField::typeName
+);
 
-
-
-
-
-
-
-
-
-
-
-
-
+volScalarField maxNiVal
+(
+    IOobject
+    (
+        "maxNiVal",
+        runTime.timeName(),
+        mesh,
+        IOobject::READ_IF_PRESENT,
+        IOobject::AUTO_WRITE
+    ),
+    mesh,
+    dimensionedScalar("maxNiVal",dimensionSet(0, 0, 0, 0, 0),0.0),
+    zeroGradientFvPatchScalarField::typeName
+);
+scalar grainNumThreshold = 0.5;
+forAll(grainNum,i){
+    forAll(PopBal,j){
+        if(
+            (PopBal[j][i] > grainNumThreshold)
+        &&  (PopBal[j][i] > maxNiVal[i])
+        )
+        {
+            maxNiVal[i] = i;
+            grainNum[i] = j;
+        }   
+    }
+}
+grainNum.write();
 
 
     return 0;
