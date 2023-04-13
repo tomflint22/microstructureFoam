@@ -1,0 +1,4 @@
+SOURCE += TesselateFoam.C
+
+EXE = $(FOAM_USER_APPBIN)/TesselateFoam_grainNum
+

@@ -55,7 +55,20 @@ int main(int argc, char *argv[])
 #   include "createMesh.H"
 
 
-
+    volScalarField xi
+    (
+        IOobject
+        (
+            "xi",
+            runTime.timeName(),
+            mesh,
+            IOobject::READ_IF_PRESENT,
+            IOobject::AUTO_WRITE
+        ),
+        mesh,
+	    dimensionedScalar("xi",dimensionSet(0, 0, 0, 0, 0),0.0),
+	    zeroGradientFvPatchScalarField::typeName
+    );
 
 
     IOdictionary PhaseFieldProperties
@@ -143,7 +156,7 @@ forAll (mesh.C(), celli) {
 
 if(con.find_voronoi_cell(mesh.C()[celli].component(0),mesh.C()[celli].component(1),mesh.C()[celli].component(2),rx,ry,rz,K)){
 // GRID[x[0]][x[1]][x[2]][K/N_coincident_phases]=1.0;
-if(PopBal[N_Seeds][celli]<1.0-SMALL){
+if(PopBal[N_Seeds][celli]<1.0-SMALL && xi[celli]>1.0-SMALL){
 PopBal[K][celli]=1.0;
 }
 }
