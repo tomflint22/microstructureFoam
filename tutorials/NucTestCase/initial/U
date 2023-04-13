@@ -9,38 +9,35 @@ FoamFile
 {
     version     2.0;
     format      ascii;
-    class       volScalarField;
-    object      p_rgh;
+    class       volVectorField;
+    location    "0";
+    object      U;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-dimensions      [0 0 0 1 0 0 0];
+dimensions      [0 1 -1 0 0 0 0];
 
-// Tliq = 1723 1928.15
-internalField   uniform 400;
+internalField   uniform (0 0 0);
 
 boundaryField
 {
 	frontAndBack{
-type zeroGradient;
+        type            slip;
 	}
-
     lowerWall
     {
-type zeroGradient;
-    }
+        type            slip;
 
+    }
     atmosphere
     {
-type zeroGradient;
+type            slip;
     }
-
-    leftWall{
-         type empty;
-    }
-    rightWall{
-         type empty;
+    defaultFaces
+    {
+        type            empty;
     }
 }
+
 
 // ************************************************************************* //

@@ -1,2 +1,0 @@
-m4 system/2Dsquare.m4 > system/blockMeshDict
-blockMesh

@@ -22,7 +22,7 @@ rho             8000;
 
     cp  600;
     cpsolid 600.0;
-    kappa  28.0;
+    kappa  40.0;
 	kappasolid  26.0; 
 	Tsolidus 1658;
 	Tliquidus 1723;

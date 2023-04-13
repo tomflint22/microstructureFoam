@@ -32,6 +32,7 @@ divSchemes
     div(rhoPhi,epsilon1)	Gauss linear;//Gauss vanLeer01;
     div((interpolate(cp)*rhoPhi),T)   Gauss upwind;
     div(rhoPhi,(epsilon1*alpha.metal)) Gauss linear;
+    
 }
 
 laplacianSchemes

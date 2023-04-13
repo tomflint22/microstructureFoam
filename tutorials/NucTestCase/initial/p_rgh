@@ -14,32 +14,32 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-dimensions      [0 0 0 1 0 0 0];
+dimensions      [1 -1 -2 0 0 0 0];
 
-// Tliq = 1723 1928.15
-internalField   uniform 400;
+internalField   uniform 0;
 
 boundaryField
 {
 	frontAndBack{
-type zeroGradient;
+        type            fixedFluxPressure;
+        value           uniform 0;
 	}
 
     lowerWall
     {
-type zeroGradient;
+        type            fixedFluxPressure;
+        value           uniform 0;
     }
 
     atmosphere
     {
-type zeroGradient;
+        type            fixedFluxPressure;
+        value           uniform 0;
     }
 
-    leftWall{
-         type empty;
-    }
-    rightWall{
-         type empty;
+    defaultFaces
+    {
+        type            empty;
     }
 }
 

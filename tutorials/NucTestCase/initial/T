@@ -17,22 +17,25 @@ FoamFile
 dimensions      [0 0 0 1 0 0 0];
 
 // Tliq = 1723 1928.15
-internalField   uniform 400;
+internalField   uniform 1724;
 
 boundaryField
 {
 	frontAndBack{
-type zeroGradient;
+        type fixedValue;
+        value uniform 1720;
 	}
 
     lowerWall
     {
-type zeroGradient;
+        type fixedValue;
+        value uniform 1720;
     }
 
     atmosphere
     {
-type zeroGradient;
+        type fixedValue;
+        value uniform 1720;
     }
 
     leftWall{
