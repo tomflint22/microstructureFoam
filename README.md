@@ -50,7 +50,7 @@ for deployment on 6 cores.
 | `stopToCheckNucSites` | bool | Stop simulation to view the nucleation sites that were set | true/false |
 
 
-### PhaseFieldProperties
+### LaserProperties
 | Parameter Name | Value Type | Parameter Description | Unit |
 | ------ | ------ | ------ | ------ | 
 | `V_incident` | vector | | m/s |
@@ -62,6 +62,23 @@ for deployment on 6 cores.
 | `wavelength` | scalar | | |
 | `e_num_density` | scalar | | |
 | `elec_resistivity` | scalar | | |
+
+### g
+| Parameter Name | Value Type | Parameter Description | Unit |
+| ------ | ------ | ------ | ------ | 
+| `dimensions` | OpenFOAM dimensions | Dimension set used to construct dimensionedVector | m/s |
+| `value` | vector | Direction and value of gravitational acceleration | m/s2 |
+
+### momentumTransport
+| Parameter Name | Value Type | Parameter Description | Unit |
+| ------ | ------ | ------ | ------ | 
+| `simulationType` | Word | laminar| - |
+
+### phaseProperties
+| Parameter Name | Value Type | Parameter Description | Unit |
+| ------ | ------ | ------ | ------ | 
+| `phases` | List<Word> | Names of phases, a separate physicalProperties.<PHASE> dict will be read for each <PHASE>  | - |
+| `simulationType` | Word | laminar| - |
 
 ### Powder-Bed Fusion Example
 
