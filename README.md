@@ -42,7 +42,7 @@ for deployment on 6 cores.
 
 nucleationDict Parameters:
 | Parameter Description | Parameter Name |
-| --- | --- |
+| ------ | ------ |
 | Activation undercooling distribution: mean [K] | Tu_mean |
 | Activation undercooling distribution: standard deviation [K] | Tu_stdev |
 | Activation undercooling distribution: site density [sites/m3] | n_max |
