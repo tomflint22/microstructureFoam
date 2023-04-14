@@ -72,7 +72,7 @@ for deployment on 6 cores.
 ### momentumTransport
 | Parameter Name | Value Type | Parameter Description | Unit |
 | ------ | ------ | ------ | ------ | 
-| `simulationType` | Word | laminar| - |
+| `simulationType` | Word | laminar?? | - |
 
 ### phaseProperties
 | Parameter Name | Value Type | Parameter Description | Unit |
@@ -92,7 +92,7 @@ for deployment on 6 cores.
 | `nu` | scalar | Dynamic viscosity | Pa.s |
 | `rho` | scalar | Density | kg/m3 |
 | `cp` | scalar | Specific heat capacity (constant pressure) | J/(kg.K) |
-| `cpsolid` | scalar | Specific heat capacity?? | J/(kg.K) |
+| `cpsolid` | scalar | Specific heat capacity...?? | J/(kg.K) |
 | `kappa` | scalar | | |
 | `kappasolid` | scalar | | |
 | `Tsolidus` | scalar | Solidus temperature | K |
