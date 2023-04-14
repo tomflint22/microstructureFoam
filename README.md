@@ -50,6 +50,19 @@ for deployment on 6 cores.
 | `stopToCheckNucSites` | bool | Stop simulation to view the nucleation sites that were set | true/false |
 
 
+### PhaseFieldProperties
+| Parameter Name | Value Type | Parameter Description | Unit |
+| ------ | ------ | ------ | ------ | 
+| `V_incident` | vector | | m/s |
+| `HS_a` | scalar | | |
+| `HS_bg` | scalar | | |
+| `HS_velocity` | scalar | | |
+| `HS_lg` | scalar | | |
+| `HS_Q` | scalar | | |
+| `wavelength` | scalar | | |
+| `e_num_density` | scalar | | |
+| `elec_resistivity` | scalar | | |
+
 ### Powder-Bed Fusion Example
 
 .... text to go here ....
