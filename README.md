@@ -42,12 +42,12 @@ for deployment on 6 cores.
 
 nucleationDict Parameters:
 | Parameter Description | Parameter Name |
-| Activation undercooling distribution: mean [K] | <pre>Tu_mean<\pre> |
-| Activation undercooling distribution: standard deviation [K] | <pre>Tu_stdev<\pre> |
-| Activation undercooling distribution: site density [sites/m3]| <pre>n_max<\pre> |
-| Maximum iterations allowed when setting nucleation sites | <pre>maxItersNucSet<\pre> |
-| Number of interface distances between nucleation sites | <pre>nucDistFactor<\pre> |
-| Stop simulation to view the nucleation sites that were set | <pre>stopToCheckNucSites<\pre> |
+| Activation undercooling distribution: mean [K] | <pre>Tu_mean</pre> |
+| Activation undercooling distribution: standard deviation [K] | <pre>Tu_stdev</pre> |
+| Activation undercooling distribution: site density [sites/m3]| <pre>n_max</pre> |
+| Maximum iterations allowed when setting nucleation sites | <pre>maxItersNucSet</pre> |
+| Number of interface distances between nucleation sites | <pre>nucDistFactor</pre> |
+| Stop simulation to view the nucleation sites that were set | <pre>stopToCheckNucSites</pre> |
 
 ### Powder-Bed Fusion Example
 
