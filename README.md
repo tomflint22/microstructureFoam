@@ -77,8 +77,29 @@ for deployment on 6 cores.
 ### phaseProperties
 | Parameter Name | Value Type | Parameter Description | Unit |
 | ------ | ------ | ------ | ------ | 
-| `phases` | List<Word> | Names of phases, a separate physicalProperties.<PHASE> dict will be read for each <PHASE>  | - |
-| `simulationType` | Word | laminar| - |
+| `phases` | List[Word] | Names of phases, a separate physicalProperties.[PHASE] dict will be read for each [PHASE]  | - |
+| `sigma` | scalar | | |
+| `dsigmadT` | scalar | | |
+| `p0` | scalar | | |
+| `Tvap` | scalar | | |
+| `Mm` | scalar | | |
+| `LatentHeatVap` | scalar | | |
+
+### physicalProperties.[PHASE]
+| Parameter Name | Value Type | Parameter Description | Unit |
+| ------ | ------ | ------ | ------ | 
+| `viscosityModel` | Word | | |
+| `nu` | scalar | | |
+| `rho` | scalar | | |
+| `cp` | scalar | | |
+| `cpsolid` | scalar | | |
+| `kappa` | scalar | | |
+| `kappasolid` | scalar | | |
+| `Tsolidus` | scalar | | |
+| `Tliquidus` | scalar | | |
+| `LatentHeat` | scalar | | |
+| `beta` | scalar | | |
+
 
 ### Powder-Bed Fusion Example
 
