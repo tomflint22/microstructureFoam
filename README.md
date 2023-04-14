@@ -40,15 +40,14 @@ for deployment on 6 cores.
 
 ## Description of case files
 ### nucleationDict
-| Parameter Name | Parameter Description | Unit |
-| ------ | ------ | ------ | 
-| `Tu_mean` | Activation undercooling distribution: mean | K |
-| `Tu_stdev` | Activation undercooling distribution: standard deviation | K |
-| `n_max` | Activation undercooling distribution: site density | [sites/m3] |
-| `maxItersNucSet` | Maximum iterations allowed when setting nucleation sites | - |
-| `nucDistFactor` | Number of interface distances between nucleation sites | - |
-| `stopToCheckNucSites` | Stop simulation to view the nucleation sites that were set | true/false |
-
+| Parameter Name | Value Type | Parameter Description | Unit |
+| ------ | ------ | ------ | ------ | 
+| `Tu_mean` | dimensionedScalar | Activation undercooling distribution: mean | K |
+| `Tu_stdev` | dimensionedScalar | Activation undercooling distribution: standard deviation | K |
+| `n_max` | dimensionedScalar| Activation undercooling distribution: site density | [sites/m3] |
+| `maxItersNucSet` | scalar | Maximum iterations allowed when setting nucleation sites | - |
+| `nucDistFactor` | scalar | Number of interface distances between nucleation sites | - |
+| `stopToCheckNucSites` | bool | Stop simulation to view the nucleation sites that were set | true/false |
 
 
 ### Powder-Bed Fusion Example
