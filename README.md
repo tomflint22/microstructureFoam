@@ -59,7 +59,7 @@ for deployment on 6 cores.
 | `HS_velocity` | scalar | | |
 | `HS_lg` | scalar | | |
 | `HS_Q` | scalar | | |
-| `wavelength` | scalar | | |
+| `wavelength` | scalar | Wavelength of incident laser?? | m |
 | `e_num_density` | scalar | | |
 | `elec_resistivity` | scalar | | |
 
@@ -89,16 +89,16 @@ for deployment on 6 cores.
 | Parameter Name | Value Type | Parameter Description | Unit |
 | ------ | ------ | ------ | ------ | 
 | `viscosityModel` | Word | | |
-| `nu` | scalar | | |
-| `rho` | scalar | | |
-| `cp` | scalar | | |
-| `cpsolid` | scalar | | |
+| `nu` | scalar | Dynamic viscosity | Pa.s |
+| `rho` | scalar | Density | kg/m3 |
+| `cp` | scalar | Specific heat capacity (constant pressure) | J/(kg.K) |
+| `cpsolid` | scalar | Specific heat capacity?? | J/(kg.K) |
 | `kappa` | scalar | | |
 | `kappasolid` | scalar | | |
-| `Tsolidus` | scalar | | |
-| `Tliquidus` | scalar | | |
-| `LatentHeat` | scalar | | |
-| `beta` | scalar | | |
+| `Tsolidus` | scalar | Solidus temperature | K |
+| `Tliquidus` | scalar | Liquidus temperature | K |
+| `LatentHeat` | scalar | Latent heat of solidfification | J/kg |
+| `beta` | scalar | Bouyancy?? | |
 
 
 ### Powder-Bed Fusion Example
