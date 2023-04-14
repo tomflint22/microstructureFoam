@@ -53,15 +53,15 @@ for deployment on 6 cores.
 ### LaserProperties
 | Parameter Name | Value Type | Parameter Description | Unit |
 | ------ | ------ | ------ | ------ | 
-| `V_incident` | vector | | m/s |
-| `HS_a` | scalar | | |
-| `HS_bg` | scalar | | |
-| `HS_velocity` | scalar | | |
-| `HS_lg` | scalar | | |
-| `HS_Q` | scalar | | |
-| `wavelength` | scalar | Wavelength of incident laser?? | m |
-| `e_num_density` | scalar | | |
-| `elec_resistivity` | scalar | | |
+| `V_incident` | vector |Initial incidence vector for laser source | - |
+| `HS_a` | scalar | Laser beam radius | m |
+| `HS_bg` | scalar | Laser Offset in x axis | m |
+| `HS_velocity` | scalar | Travel velocity of laser heat source in z direction | m/s |
+| `HS_lg` | scalar | Laser Offset in z axis | m |
+| `HS_Q` | scalar | Laser Power | W |
+| `wavelength` | scalar | Wavelength of incident laser | m |
+| `e_num_density` | scalar | electron number density of substrate |m^{-3} |
+| `elec_resistivity` | scalar | Electrical resistivity of substrate | |
 
 ### g
 | Parameter Name | Value Type | Parameter Description | Unit |
