@@ -22,17 +22,20 @@ internalField   uniform 400;
 boundaryField
 {
 	frontAndBack{
-type zeroGradient;
+	type fixedGradient;
+	gradient uniform 0.0;
 	}
 
     lowerWall
     {
-type zeroGradient;
+	type fixedGradient;
+	gradient uniform 0.0;
     }
 
     atmosphere
     {
-type zeroGradient;
+	type fixedGradient;
+	gradient uniform -50000.0;
     }
 
     leftWall{

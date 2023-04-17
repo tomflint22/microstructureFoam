@@ -23,19 +23,19 @@ boundaryField
 {
 	frontAndBack{
         type fixedValue;
-        value uniform 1720;
+        value uniform 1710;
 	}
 
     lowerWall
     {
         type fixedValue;
-        value uniform 1720;
+        value uniform 1710;
     }
 
     atmosphere
     {
         type fixedValue;
-        value uniform 1720;
+        value uniform 1710;
     }
 
     leftWall{

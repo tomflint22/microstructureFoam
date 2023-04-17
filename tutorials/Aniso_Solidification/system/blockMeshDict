@@ -52,7 +52,8 @@ boundary
         type wall;
         faces
         (
-            (3 7 6 2)
+            (0 3 2 1)
+            
 
         );
     }
@@ -62,7 +63,8 @@ boundary
         type patch;
         faces
         (
-            (1 5 4 0)
+            (5 6 7 4)
+            
         );
     }
     rightWall
@@ -87,8 +89,9 @@ boundary
         type patch;
         faces
         (
-            (0 3 2 1)
-	    (5 6 7 4)
+            (3 7 6 2)
+            (1 5 4 0)
+	    
         );
     }
 );

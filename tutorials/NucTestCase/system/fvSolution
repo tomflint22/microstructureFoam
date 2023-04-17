@@ -18,15 +18,15 @@ solvers
 {
     "alpha.metal.*"
     {
-        nAlphaCorr      2;
+        nAlphaCorr      1;
         nAlphaSubCycles 1;
 
-        MULESCorr       yes;
+        MULESCorr       no;
         nLimiterIter    5;
 
         solver          smoothSolver;
         smoother        symGaussSeidel;
-        tolerance       1e-9;
+        tolerance       1e-5;
         relTol          0;
     }
 
@@ -34,7 +34,7 @@ solvers
     {
         solver          PCG;
         preconditioner  DIC;
-        tolerance       1e-9;
+        tolerance       1e-5;
         relTol          0;
     }
 
@@ -42,7 +42,7 @@ solvers
     {
         solver          PCG;
         preconditioner  DIC;
-        tolerance       1e-09;
+        tolerance       1e-05;
         relTol          0.0;
     }
 
@@ -56,7 +56,7 @@ solvers
     {
         solver          smoothSolver;
         smoother        symGaussSeidel;
-        tolerance       1e-09;
+        tolerance       1e-05;
         relTol          0;
     }
         T

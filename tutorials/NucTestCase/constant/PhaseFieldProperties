@@ -25,7 +25,7 @@ gamma_pf	1.5;
 sigma_P	1.0;
 sigma_G	0.25;
 lp	2.0e-5;
-lg	2.0e-5;
+lg	4.0e-5;
 deltaf_g	0.125;
 deltaf_p	0.25;
 D0	5.0;//0.034;

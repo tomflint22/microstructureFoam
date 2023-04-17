@@ -23,7 +23,7 @@ startTime       0;
 
 stopAt          endTime;
 
-endTime         5.0e-3;
+endTime         5.0e-2;
 
 deltaT          1.0e-6;
 
@@ -50,7 +50,7 @@ adjustTimeStep  yes;
 maxCo           0.1;//0.1;
 maxAlphaCo      0.1;
 
-maxDeltaT       0.5e-5;
+maxDeltaT       0.25e-5;
 
 
 // ************************************************************************* //
