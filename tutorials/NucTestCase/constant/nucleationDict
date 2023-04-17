@@ -21,12 +21,9 @@ Tu_stdev	Tu_stdev [0 0 0 1 0 0 0] 0.5;
 // n_max		n_max [0 -3 0 0 0 0 0] 1e18;
 // n_max       n_max [0 -3 0 0 0 0 0] 0;
 // n_max       n_max [0 -3 0 0 0 0 0] 1e20;
-n_max       n_max [0 -3 0 0 0 0 0] 5.0e15;
+n_max       n_max [0 -3 0 0 0 0 0] 1.0e17;
 
 maxItersNucSet 1e9;
-
-xiThreshold	    0.1;
 nucDistFactor   3;
-
 stopToCheckNucSites     false;
 // ************************************************************************* //

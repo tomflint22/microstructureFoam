@@ -14,9 +14,7 @@ FoamFile
     object      PhaseFieldProperties;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-grainNumThreshold 0.5;
-
-//N_Phases	500;
+grainNumThreshold 1e-4;
 
 Aniso_strength 0.5;
 
