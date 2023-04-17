@@ -1,3 +1,5 @@
+dimensionedScalar TSmooth("TSmooth",dimensionSet(0, 0, 0, 1, 0),50.0);
+const volVectorField gradAlpha(fvc::grad(alpha1));
 {
     int iter = 0;
     dimensionedScalar residual("residual",dimensionSet(0, 0, 0, 0, 0),scalar(1.0));
