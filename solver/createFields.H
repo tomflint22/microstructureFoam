@@ -853,7 +853,7 @@ forAll(grainNum,i){
         &&  (PopBal[j][i] > maxNiVal[i])
         )
         {
-            maxNiVal[i] = i;
+            maxNiVal[i] = PopBal[j][i];
             grainNum[i] = j;
         }   
     }
