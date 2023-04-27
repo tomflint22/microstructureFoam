@@ -23,13 +23,13 @@ boundaryField
 {
 	frontAndBack{
 	type fixedGradient;
-	gradient uniform 0.0;
+	gradient uniform -0.0;
 	}
 
     lowerWall
     {
 	type fixedGradient;
-	gradient uniform -50000.0;
+	gradient uniform -750000.0;
     }
 
     atmosphere

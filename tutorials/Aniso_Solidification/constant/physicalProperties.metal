@@ -22,11 +22,11 @@ rho             8000;
 
     cp  600;
     cpsolid 600.0;
-    kappa  40.0;
+    kappa  60.0;
 	kappasolid  26.0; 
 	Tsolidus 1658;
 	Tliquidus 1723;
-    LatentHeat 2.5e2;
+    LatentHeat 2.5e5;
     beta    2.0e-5;
 
 

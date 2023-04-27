@@ -124,4 +124,6 @@ solve
     +Lp*fvm::laplacian(Kp,xi)
 );
 
+xi=max(min(xi,1.0),0.0);
+
 }
