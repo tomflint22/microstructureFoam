@@ -30,7 +30,7 @@ gamma_pf	1.5;
 //Kp	1.5e-6;
 
 
-sigma_P	1.0;
+sigma_P	0.1;
 sigma_G	0.25;
 lp	2e-6;
 lg	2e-6;
