@@ -84,6 +84,8 @@ for deployment on 6 cores.
 | `Tvap` | scalar | | |
 | `Mm` | scalar | | |
 | `LatentHeatVap` | scalar | | |
+| `write_ni_all` | bool | Set to true by default, to turn off the writing of INACTIVE n.i field, include `write_ni_all false;` | true/false |
+| `write_ni_active` | bool | Set to true by default, to turn off the writing of ALL n.i fields, include `write_ni_active false;` as well as `write_ni_all false;`  | true/false |
 
 ### physicalProperties.[PHASE]
 | Parameter Name | Value Type | Parameter Description | Unit |
