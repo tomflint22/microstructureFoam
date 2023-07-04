@@ -753,7 +753,7 @@ Info<<"Number of Phase Field Order Parameters: "<<N_Ori<<endl;
 
 PtrList<volScalarField> PopBal(N_Ori);
 PtrList<volScalarField> Sum_parts(N_Ori);
-
+List<bool> niActive (PopBal.size(),true);
 
     for(label count = 0; count < N_Ori; count++)
 {
@@ -771,7 +771,8 @@ PtrList<volScalarField> Sum_parts(N_Ori);
                 runTime.timeName(),
                 mesh,
                 IOobject::READ_IF_PRESENT,//IOobject::MUST_READ,
-                IOobject::AUTO_WRITE
+                // IOobject::AUTO_WRITE
+                IOobject::NO_WRITE
             ),
             mesh,
 	    dimensionedScalar("ni",dimensionSet(0, 0, 0, 0, 0),0.0),
@@ -840,6 +841,9 @@ volScalarField maxNiVal
 );
 
 scalar grainNumThreshold( readScalar(PhaseFieldProperties.lookup("grainNumThreshold")));
+
+Switch write_ni_all( PhaseFieldProperties.lookupOrDefault<Switch>("write_ni_all",true) );
+Switch write_ni_active( PhaseFieldProperties.lookupOrDefault<Switch>("write_ni_active",true) );
 
 
 // Set grain num field to indicate which field occupies the cell

@@ -3,3 +3,6 @@
 rm -r 0
 cp -r 0_org 0
 rm -r 0.* [1-9]*
+rm -r processor*
+rm *.log
+rm *.foam

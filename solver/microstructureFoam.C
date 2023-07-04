@@ -215,7 +215,7 @@ int main(int argc, char *argv[])
 
             // Need to mark n.X fields that are active
             // Making a list, will make it on every MPI process, so we should use max rather than gMax
-            List<bool> niActive (PopBal.size(),true);
+            // List<bool> niActive (PopBal.size(),true);
             label nNiActive(0);
 
             forAll(niActive,i){
@@ -275,6 +275,24 @@ int main(int argc, char *argv[])
                         qv[i] = rot2[gn].v();
                     }
                     
+                }
+            }
+
+            //- Write n.i fields
+            if (write_ni_all)
+            {
+                forAll(PopBal,i){
+                    PopBal[i].write();
+                }
+            }
+            else if (write_ni_active)
+            {
+                forAll(PopBal,i){
+                    // if (gMax(PopBal[i]) > grainNumThreshold)
+                    if (niActive[i])    
+                    {
+                        PopBal[i].write();
+                    }
                 }
             }
         }
