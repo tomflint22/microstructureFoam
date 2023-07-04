@@ -84,6 +84,33 @@ for deployment on 6 cores.
 | `Tvap` | scalar | | |
 | `Mm` | scalar | | |
 | `LatentHeatVap` | scalar | | |
+
+
+### PhaseFieldProperties
+| Parameter Name | Value Type | Parameter Description | Unit |
+| ------ | ------ | ------ | ------ | 
+| `grainNumThreshold` | scalar | | |
+| `Aniso_strength` | scalar | | |
+| `gamma_pf` | scalar | | |
+| `sigma_P` | scalar | | |
+| `sigma_G` | scalar | | |
+| `lp` | scalar | | |
+| `lg` | scalar | | |
+| `deltaf_p` | scalar | | |
+| `deltaf_p` | scalar | | |
+| `D0` | scalar | | |
+| `Qg` | scalar | | |
+| `sigma_G` | scalar | | |
+| `sigma_G` | scalar | | |
+| `N_Seeds` | int | | |
+| `Xmin` | scalar | | |
+| `Xmax` | scalar | | |
+| `Ymin` | scalar | | |
+| `Ymax` | scalar | | |
+| `Zmin` | scalar | | |
+| `Zmax` | scalar | | |
+| `sigma_G` | scalar | | |
+| `sigma_G` | scalar | | |
 | `write_ni_all` | bool | Set to true by default, to turn off the writing of INACTIVE n.i field, include `write_ni_all false;` | true/false |
 | `write_ni_active` | bool | Set to true by default, to turn off the writing of ALL n.i fields, include `write_ni_active false;` as well as `write_ni_all false;`  | true/false |
 
