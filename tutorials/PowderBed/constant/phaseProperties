@@ -16,9 +16,9 @@ FoamFile
 
 phases          (metal gas);
 
-sigma           1.2;
+sigma           1.5;
 
-dsigmadT	-0.2e-4;
+dsigmadT	-0.1e-4;
 
 p0		100000.0;
 Tvap 3068.0;

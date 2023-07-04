@@ -40,14 +40,14 @@ D0	1.5;//0.034;
 Qg	1000;//140e3;
 
 
-N_Phases 201;
+//N_Phases 201;
 //Voronoi Tesselation Parameters
-N_Seeds 200; //used to seed the initial microstructure with tesselatefoam
+N_Seeds 3; //used to seed the initial microstructure with tesselatefoam
 
 Xmin -0.05e-6;
 Xmax 0.05e-6;
 Ymin 5e-5;
 Ymax 1.5e-4;
 Zmin 0.0e-04;
-Zmax 4e-4;
+Zmax 6e-4;
 //Voronoi Tesselation Parameters
