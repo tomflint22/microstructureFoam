@@ -18,22 +18,16 @@ FoamFile
 grainNumThreshold 0.5;
 
 
-Aniso_strength 0.5;
+Aniso_strength 0.1;
 
-
-//Kg	0.225e-6;
 gamma_pf	1.5;
-//m_g	450000;
-//Lg	1.285;
-//m_p	1200000;
-//Lp	0.5;
-//Kp	1.5e-6;
+
 
 
 sigma_P	0.1;
 sigma_G	0.25;
-lp	2e-6;
-lg	2e-6;
+lp	4e-6;
+lg	4e-6;
 deltaf_g	0.125;
 deltaf_p	0.25;
 D0	1.5;//0.034;
@@ -42,7 +36,7 @@ Qg	1000;//140e3;
 
 //N_Phases 201;
 //Voronoi Tesselation Parameters
-N_Seeds 300; //used to seed the initial microstructure with tesselatefoam
+N_Seeds 600; //used to seed the initial microstructure with tesselatefoam
 
 Xmin -0.05e-6;
 Xmax 0.05e-6;
