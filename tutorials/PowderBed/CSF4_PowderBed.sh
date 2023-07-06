@@ -1,7 +1,7 @@
 #!/bin/bash --login
 # Runs in current dir by default
 #SBATCH -p multicore  # (or --partition=) 
-#SBATCH -c 8 # (or --cpus-per-task=) Number of cores to use for OpenMP (2--40)
+#SBATCH -n 8 # -c (or --cpus-per-task=) Number of cores to use for OpenMP (2--40)
 
 # Can load modulefiles
 module load openfoam/10-foss-2021a
