@@ -24,26 +24,26 @@ gamma_pf	1.5;
 
 
 
-sigma_P	0.15;
-sigma_G	0.5;
+sigma_P	0.1;
+sigma_G	0.2;
 lp	2e-6;
 lg	2e-6;
-deltaf_g	0.125;
-deltaf_p	0.25;
+deltaf_g	0.25;
+deltaf_p	0.125;
 D0	5.0;//0.034;
 Qg	20000;//140e3;
 
 
 //N_Phases 201;
 //Voronoi Tesselation Parameters
-N_Seeds 500; //used to seed the initial microstructure with tesselatefoam
+N_Seeds 3; //used to seed the initial microstructure with tesselatefoam
 
 Xmin -0.05e-6;
 Xmax 0.05e-6;
 Ymin 5e-5;
 Ymax 1.5e-4;
 Zmin 0.0e-04;
-Zmax 6e-4;
+Zmax 6.0e-4;
 //Voronoi Tesselation Parameters
 
 
