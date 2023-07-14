@@ -9,35 +9,40 @@ FoamFile
 {
     version     2.0;
     format      ascii;
-    class       volScalarField;
-    object      p_rgh;
+    class       dictionary;
+    location    "system";
+    object      setFieldsDict;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-dimensions      [0 0 0 1 0 0 0];
+defaultFieldValues
+(
+    volScalarFieldValue alpha.metal 1
+    volScalarFieldValue xi 0.0
+);
 
-internalField   uniform 300.0;
 
-boundaryField
+
+
+
+regions
+(
+
+cylinderToCell
 {
-	frontAndBack{
-type zeroGradient;
-	}
+p1 	 (-1 	 0.5e-03 	 0.5e-03);
+p2 	 (51 	 0.5e-03 	 0.5e-03);
+radius 2.0e-05;
+fieldValues
+(
+volScalarFieldValue n.0 1.0
+volScalarFieldValue xi 1.0
+volScalarFieldValue T 1710
 
-    lowerWall
-    {
-type zeroGradient;
-    }
-
-    atmosphere
-    {
-type zeroGradient;
-    }
-
-    defaultFaces
-    {
-        type            empty;
-    }
+);
 }
+
+);
+
 
 // ************************************************************************* //

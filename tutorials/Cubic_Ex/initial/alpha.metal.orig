@@ -7,37 +7,34 @@
 \*---------------------------------------------------------------------------*/
 FoamFile
 {
-    version     2.0;
     format      ascii;
     class       volScalarField;
-    object      p_rgh;
+    object      alpha.water;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-dimensions      [0 0 0 1 0 0 0];
+dimensions      [0 0 0 0 0 0 0];
 
-internalField   uniform 300.0;
+internalField   uniform 1;
 
 boundaryField
 {
 	frontAndBack{
-type zeroGradient;
+        type            zeroGradient;
 	}
-
     lowerWall
     {
-type zeroGradient;
+        type            zeroGradient;
     }
-
     atmosphere
     {
-type zeroGradient;
+    type            zeroGradient;
     }
-
     defaultFaces
     {
         type            empty;
     }
 }
+
 
 // ************************************************************************* //

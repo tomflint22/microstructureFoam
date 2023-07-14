@@ -9,35 +9,24 @@ FoamFile
 {
     version     2.0;
     format      ascii;
-    class       volScalarField;
-    object      p_rgh;
+    class       dictionary;
+    location    "constant";
+    object      nucleationDict;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-dimensions      [0 0 0 1 0 0 0];
+Tu_mean		Tu_mean [0 0 0 1 0 0 0] 1.0;
+Tu_stdev	Tu_stdev [0 0 0 1 0 0 0] 0.5;
 
-internalField   uniform 300.0;
+// n_max		n_max [0 -3 0 0 0 0 0] 1e18;
+// n_max       n_max [0 -3 0 0 0 0 0] 0;
+// n_max       n_max [0 -3 0 0 0 0 0] 1e20;
+n_max       n_max [0 -3 0 0 0 0 0] 0.0;//1.0e17;
 
-boundaryField
-{
-	frontAndBack{
-type zeroGradient;
-	}
+maxItersNucSet 1e9;
 
-    lowerWall
-    {
-type zeroGradient;
-    }
+xiThreshold	    0.1;
+nucDistFactor   3;
 
-    atmosphere
-    {
-type zeroGradient;
-    }
-
-    defaultFaces
-    {
-        type            empty;
-    }
-}
-
+stopToCheckNucSites     false;
 // ************************************************************************* //
