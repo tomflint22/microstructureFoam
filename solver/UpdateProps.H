@@ -68,7 +68,7 @@ epsilon1mask.correctBoundaryConditions();
 
 
 
-
+if(Aniso_strength.value()>SMALL){
 
 
 //Anisotropy_Stuff
@@ -135,8 +135,8 @@ denominator+=niav*niav*(1.0-xiav)*(1.0-xiav);
 Aniso_Mob=numerator/(denominator+deltaN2);
 
 
-
-
+}
+else{}
 
 
 

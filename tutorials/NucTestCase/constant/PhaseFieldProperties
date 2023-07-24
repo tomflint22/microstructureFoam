@@ -20,14 +20,14 @@ Aniso_strength 0.4;
 
 gamma_pf	1.5;
 
-sigma_P	1.0;
+sigma_P	0.2;
 sigma_G	1.0;
 lp	4.0e-5;
 lg	4.0e-5;
 deltaf_g	0.125;
-deltaf_p	0.125;
-D0	20.0;//0.034;
-Qg	35000;//140e3;
+deltaf_p	0.25;
+D0	10.0;//0.034;
+Qg	25000;//140e3;
 
 
 
@@ -42,3 +42,6 @@ Zmin 1e-3;
 Zmax 2e-3;
 //Voronoi Tesselation Parameters
 
+
+write_ni_all  false;
+write_ni_active  true;

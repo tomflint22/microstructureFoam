@@ -26,7 +26,7 @@ rho             8000;
 	kappasolid  50.0; 
 	Tsolidus 1658;
 	Tliquidus 1723;
-    LatentHeat 2.5e2;
+    LatentHeat 2.5e3;
     beta    2.0e-5;
 
 

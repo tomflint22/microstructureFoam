@@ -17,7 +17,7 @@ FoamFile
 dimensions      [0 0 0 1 0 0 0];
 
 // Tliq = 1723 1928.15
-internalField   uniform 1724;
+internalField   uniform 1710;//1724;
 
 boundaryField
 {
