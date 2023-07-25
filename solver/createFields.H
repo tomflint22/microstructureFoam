@@ -1010,8 +1010,10 @@ rot[i]=temprot;
 
 
 
-
-Random randObjq(clock::getTime());
+// Need to check if all procs have the same seed for the random gen
+scalar randGenSeed = clock::getTime();
+reduce(randGenSeed,minOp<scalar>());
+Random randObjq(randGenSeed);
 
 quaternion rot2[N_Ori]={quaternion::zero};
 
