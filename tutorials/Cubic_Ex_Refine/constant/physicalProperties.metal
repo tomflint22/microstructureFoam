@@ -2,45 +2,32 @@
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
    \\    /   O peration     | Website:  https://openfoam.org
-    \\  /    A nd           | Version:  6
+    \\  /    A nd           | Version:  10
      \\/     M anipulation  |
 \*---------------------------------------------------------------------------*/
 FoamFile
 {
-    version     2.0;
     format      ascii;
     class       dictionary;
     location    "constant";
-    object      PhaseFieldProperties;
+    object      physicalProperties.water;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
-grainNumThreshold 0.5;
 
-//N_Phases	500;
+viscosityModel  constant;
 
-Aniso_strength 0.5;
+nu              2.5e-06;
 
-gamma_pf	1.5;
+rho             8000;
 
-sigma_P	0.1;
-sigma_G	0.5;
-lp	4.0e-5;
-lg	4.0e-5;
-deltaf_g	0.125;
-deltaf_p	0.25;
-D0	5.0;//0.034;
-Qg	20000;//140e3;
-
+    cp  600;
+    cpsolid 600.0;
+    kappa  60.0;
+	kappasolid  26.0; 
+	Tsolidus 1658;
+	Tliquidus 1723;
+    LatentHeat 2.5e2;//2.5e5;
+    beta    2.0e-5;
 
 
-//Voronoi Tesselation Parameters
-N_Seeds 150;//1415; //used to seed the initial microstructure with tesselatefoam
-
-Xmin -0.05e-3;
-Xmax 0.05e-3;
-Ymin 0e-3;
-Ymax 1e-3;
-Zmin 0.0e-3;
-Zmax 1e-3;
-//Voronoi Tesselation Parameters
-
+// ************************************************************************* //

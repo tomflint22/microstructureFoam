@@ -10,36 +10,23 @@ FoamFile
     version     2.0;
     format      ascii;
     class       dictionary;
-    location    "system";
-    object      decomposeParDict;
+    location    "constant";
+    object      nucleationDict;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-numberOfSubdomains 32;
+Tu_mean		Tu_mean [0 0 0 1 0 0 0] 1.0;
+Tu_stdev	Tu_stdev [0 0 0 1 0 0 0] 0.5;
 
-method          scotch;
+// n_max		n_max [0 -3 0 0 0 0 0] 1e18;
+// n_max       n_max [0 -3 0 0 0 0 0] 0;
+// n_max       n_max [0 -3 0 0 0 0 0] 1e20;
+n_max       n_max [0 -3 0 0 0 0 0] 0.0;//1.0e17;
 
-simpleCoeffs
-{
-    n               (1 1 4);
-    delta           0.001;
-}
+maxItersNucSet 1e9;
 
-hierarchicalCoeffs
-{
-    n               (1 1 1);
-    delta           0.001;
-    order           xyz;
-}
+xiThreshold	    0.1;
+nucDistFactor   3;
 
-manualCoeffs
-{
-    dataFile        "";
-}
-
-distributed     no;
-
-roots           ( );
-
-
+stopToCheckNucSites     false;
 // ************************************************************************* //
