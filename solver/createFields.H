@@ -753,6 +753,32 @@ Info<<"Number of Phase Field Order Parameters: "<<N_Ori<<endl;
 
 PtrList<volScalarField> PopBal(N_Ori);
 PtrList<volScalarField> Sum_parts(N_Ori);
+
+for(label count = 0; count < N_Ori; count++)
+{
+
+    word name_Sum_parts ("Sum_parts" + name(count));
+
+    Sum_parts.set
+    (
+        count,
+        new volScalarField
+        (
+            IOobject
+            (
+                name_Sum_parts,
+                runTime.timeName(),
+                mesh,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            mesh,
+            dimensionedScalar("Sum_parts",dimensionSet(0, 0, 0, 0, 0),0.0),
+            zeroGradientFvPatchScalarField::typeName
+        )
+    );
+}
+
 List<bool> niActive (PopBal.size(),true);
 
     for(label count = 0; count < N_Ori; count++)
@@ -795,20 +821,34 @@ volScalarField xi
     dimensionedScalar("xi",dimensionSet(0, 0, 0, 0, 0),0.0),
     zeroGradientFvPatchScalarField::typeName
 );
-// xi.write();
 
-// // Melt any cells above liquidus
-// forAll( mesh.C(), celli)
-// {
-//     if(T[celli]>TLiquidus[celli])
-//     {
-//         for(label count = 0; count < N_Ori; count++)
-//         {
-//             PopBal[count][celli] = 0.0;
-//         }
-//     }
-//     xi[celli] = 0.0; // TOM: Should this be included
-// }
+
+PtrList<volScalarField> PopBal_av(N_Ori);
+
+for(label count = 0; count < N_Ori; count++)
+{
+
+    word name_ni_av ("n_av" + name(count));
+
+    PopBal_av.set
+    (
+        count,
+        new volScalarField
+        (
+            IOobject
+            (
+                name_ni_av,
+                runTime.timeName(),
+                mesh,
+                IOobject::NO_READ,
+                IOobject::NO_WRITE
+            ),
+            mesh,
+            dimensionedScalar("niav",dimensionSet(0, 0, 0, 0, 0),0.0),
+            zeroGradientFvPatchScalarField::typeName
+        )
+    );
+}
 
 volScalarField grainNum
 (

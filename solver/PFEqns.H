@@ -76,6 +76,63 @@ Info << "Before sum phases " << endl;
 Sum_Phases*=0.0;
 GBs*=0.0;
 
+/**/
+for (label count = 0; count < N_Ori; count++) //find the number of non zero phases at each point in the domain
+{
+    volScalarField & ni = PopBal[count];
+    PopBal_av[count] = fvc::average(ni); //takes the average from all cells sharing a face - this way the information about phases in adjacent cells is shared with the local cell
+    PopBal_av[count].correctBoundaryConditions();
+    Sum_parts[count]*=0.0;
+}
+
+
+forAll(mesh.C(), cell)
+{
+    label active_phases[N_Ori] =
+    {
+        0
+    };
+    label n_active_phases = 0;
+
+
+
+    for (label count = 0; count < N_Ori; count++)
+    {
+        if (PopBal_av[count][cell] > 0.0)
+        {
+            active_phases[n_active_phases++] = count;
+        }
+
+    }
+
+
+    for (label count_i = 0; count_i < n_active_phases; count_i++)
+        {
+            GBs[cell]+=PopBal[active_phases[count_i]][cell]*PopBal[active_phases[count_i]][cell];
+
+            scalar initial_sum = Foam::pow(PopBal[active_phases[count_i]][cell],3.0)-PopBal[active_phases[count_i]][cell]+(2.0*PopBal[active_phases[count_i]][cell]*Foam::pow(1.0-xi[cell],2.0));
+
+                Sum_Phases[cell]+=PopBal[active_phases[count_i]][cell];
+        for (label count_j = 0; count_j < n_active_phases; count_j++)
+        {
+                if(active_phases[count_i] != active_phases[count_j]){
+                        initial_sum+=2.0*gamma_pf.value()*PopBal[active_phases[count_i]][cell]*Foam::pow(PopBal[active_phases[count_j]][cell],2.0);
+                }
+        }
+
+        Sum_parts[active_phases[count_i]][cell]=initial_sum;
+
+
+        }
+
+
+
+}
+
+
+
+
+/*
 for(label count = 0; count < N_Ori; count++)
 {
     if (niActive[count])
@@ -104,6 +161,7 @@ for(label count = 0; count < N_Ori; count++)
             // volScalarField& Su=Sum_parts[count];
     }
 }
+*/
 
 Info << "Before solveNi " << endl;
 
