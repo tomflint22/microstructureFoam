@@ -14,34 +14,27 @@ FoamFile
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-convertToMeters 0.00001;
+convertToMeters 1e-3;
 
-vertices
+vertices//defines the points that bound the mesh
 (
- //   (-0.05 0 0)//0
-   // (0.05 0 0)//1
-//    (0.05 30 0)//2
-//    (-0.05 30 0)//3
-//    (-0.05 0 69)//4	//shoule be 69
-//    (0.05 0 69)//5
-//    (0.05 30 69)//6
-//    (-0.05 30 69)//7
 
-    (-0.05 -10 0)//0
-    (0.05 -10 0)//1
-    (0.05 20 0)//2
-    (-0.05 20 0)//3
-    (-0.05 -10 30)//4	//shoule be 69
-    (0.05 -10 30)//5
-    (0.05 20 30)//6
-    (-0.05 20 30)//7
+
+    (0 0 0)//0
+    (1 0 0)//1
+    (1 1 0)//2
+    (0 1 0)//3
+    (0 0 1)//4
+    (1 0 1)//5
+    (1 1 1)//6
+    (0 1 1)//7
 
 
 
 );
 blocks
 (
-    hex (0 1 2 3 4 5 6 7) (1 300 300) simpleGrading (1 1 1)		//REGION 1
+    hex (0 1 2 3 4 5 6 7) (30 30 30) simpleGrading (1 1 1)		//REGION 1
 
 
 
@@ -59,7 +52,8 @@ boundary
         type wall;
         faces
         (
-            (3 7 6 2)
+            (0 3 2 1)
+            
 
         );
     }
@@ -69,12 +63,13 @@ boundary
         type patch;
         faces
         (
-            (1 5 4 0)
+            (5 6 7 4)
+            
         );
     }
     rightWall
     {
-        type empty;
+        type wall;
         faces
         (
             (1 2 6 5)
@@ -83,7 +78,7 @@ boundary
     }
     leftWall
     {
-        type empty;
+        type wall;
         faces
         (
             (0 4 7 3)
@@ -94,8 +89,9 @@ boundary
         type patch;
         faces
         (
-            (0 3 2 1)
-	    (5 6 7 4)
+            (3 7 6 2)
+            (1 5 4 0)
+	    
         );
     }
 );

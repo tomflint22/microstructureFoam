@@ -28,19 +28,19 @@ defaultFieldValues
 regions
 (
 
-cylinderToCell
-{
-p1 	 (-1 	 0.5e-03 	 0.5e-03);
-p2 	 (51 	 0.5e-03 	 0.5e-03);
-radius 2.0e-05;
-fieldValues
-(
+
+
+sphereToCell 
+    { 
+        centre ( 0.5e-03 0.5e-03 0.5e-03 ); 
+        radius  4.0e-05 ; 
+        fieldValues  
+        (  
 volScalarFieldValue n.0 1.0
 volScalarFieldValue xi 1.0
 volScalarFieldValue T 1710
-
-);
-}
+        );  
+    } 
 
 );
 

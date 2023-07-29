@@ -98,7 +98,7 @@ forAll(mesh.C(), cell)
 
     for (label count = 0; count < N_Ori; count++)
     {
-        if (PopBal_av[count][cell] > 0.0)
+        if (PopBal_av[count][cell] > SMALL)
         {
             active_phases[n_active_phases++] = count;
         }
