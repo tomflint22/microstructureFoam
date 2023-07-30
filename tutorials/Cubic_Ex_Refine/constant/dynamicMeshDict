@@ -39,7 +39,7 @@ topoChanger
     maxRefinement   3;
 
     // Stop refinement if maxCells reached
-    maxCells        200000;
+    maxCells        20000000;
 
     // Flux field and corresponding velocity field. Fluxes on changed
     // faces get recalculated by interpolating the velocity. Use 'none'
