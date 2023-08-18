@@ -20,9 +20,9 @@ nu              5e-07;
 
 rho             8000;
 
-    cp  800;
+    cp  600;
     cpsolid 600.0;
-    kappa  30.0;
+    kappa  20.0;
 	kappasolid  20.0; 
 	Tsolidus 1658;
 	Tliquidus 1723;
