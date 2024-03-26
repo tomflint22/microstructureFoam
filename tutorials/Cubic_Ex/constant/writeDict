@@ -1,0 +1,89 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  10
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      writeDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+writeDefaultFields  true;
+write_ni_all        false;
+write_ni_active     false;
+
+volScalarFieldsToWrite
+(
+  // Aniso_Mob
+  // DC
+  // Deposition
+  // ErrorTrack
+  // ErrorTrack2
+  // GBs
+  // Laser_boundary
+  // LatentHeat
+  // Lg
+  // Lp
+  // Num_divU
+  // Qv
+  // Ray_Number
+  // Ray_Q
+  // Sum_Phases
+  // T
+  // TLiquidus
+  // TRHS
+  // TSolidus
+  // Tcorr
+  // Tu
+  // alpha.gas
+  // alpha.metal
+  // alpha_filtered
+  // beta
+  // cp
+  // damper
+  // ddte1
+  // denominator
+  // epsilon1
+  // epsilon1mask
+  // gh
+  // grainNum
+  // interfaceProperties:K
+  // kappa
+  // maxNiVal
+  // nu
+  // nu.gas
+  // nu.metal
+  // nucSite
+  // nucSiteProc
+  // nucTu
+  // numerator
+  // p
+  // pVap
+  // p_rgh
+  // phi_PF
+  // procID
+  // qw
+  // rho
+  // rho_0
+  // rhok
+  // thermalDamper
+  // xi
+  // yDim
+);
+
+volVectorFieldsToWrite
+(
+  // Marangoni
+  // U
+  // gradT
+  // n_filtered
+  // qv
+);
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //

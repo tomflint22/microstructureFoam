@@ -110,7 +110,7 @@ volScalarField nucTu
         runTime.timeName(),
         mesh,
         IOobject::NO_READ, // Could set to READ_IF_PRESENT if desired
-        IOobject::AUTO_WRITE // Could be manually written instead
+        IOobject::NO_WRITE // Could be manually written instead
     ),
     mesh,
     dimensionedScalar("nucTu",dimensionSet(0, 0, 0, 1, 0),-100.0) // -100 is a dummy value
@@ -131,7 +131,7 @@ volScalarField nucSite
         runTime.timeName(),
         mesh,
         IOobject::NO_READ,
-        IOobject::AUTO_WRITE // Could be manually written instead
+        IOobject::NO_WRITE // Could be manually written instead
     ),
     mesh,
     dimensionedScalar("nucSite",dimensionSet(0, 0, 0, 1, 0),-1.0)
@@ -450,7 +450,15 @@ Info << "numNucSitesSet: " << numNucSitesSet << "\tN_max: " << N_max << endl;
 Info << "nucTu max: " << gMax(nucTu) << "\tmin: "<< gMin(nucTu) << "\tavg: " << avgNucTu<< "\tzero: " << numNucTuZero << endl;
 
 
-Info << "\n\tSETTING OF NUCLEATION SITES COMPLETE" << nl << endl;
+Info << "\n\tSETTING OF NUCLEATION SITES COMPLETE." << nl << endl;
+
+if (!nucleationDict.lookupOrDefault<bool>("nucTu_dontWrite",false))
+{
+    Info << " Writing nucTu to " << runTime.value() << " directory" << nl 
+    << " (can be switched off by adding nucTu_dontWrite true; to constant/nucleationDict)"
+    << endl;    
+    nucTu.write();
+}
 
 
 Switch stopToCheckNucSites

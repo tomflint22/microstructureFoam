@@ -14,7 +14,7 @@ if
                 runTime.timeName(),
                 mesh,
                 IOobject::READ_IF_PRESENT,
-                IOobject::AUTO_WRITE
+                IOobject::NO_WRITE
             ),
             mesh,
             dimensionedScalar(dimTime/dimDensity, 1)

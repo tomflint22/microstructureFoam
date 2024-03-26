@@ -15,7 +15,7 @@ volScalarField p_rgh
         runTime.timeName(),
         mesh,
         IOobject::MUST_READ,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh
 );
@@ -29,7 +29,7 @@ volVectorField U
         runTime.timeName(),
         mesh,
         IOobject::MUST_READ,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh
 );
@@ -43,7 +43,7 @@ volScalarField T
         runTime.timeName(),
         mesh,
         IOobject::MUST_READ,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh
 );
@@ -90,7 +90,7 @@ volScalarField p
         runTime.timeName(),
         mesh,
         IOobject::NO_READ,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     p_rgh + rho*gh
 );
@@ -113,20 +113,6 @@ mesh.schemes().setFluxRequired(p_rgh.name());
 
 volScalarField& alpha1(mixture.alpha1());
 mesh.schemes().setFluxRequired(alpha1.name());
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 IOdictionary transportProperties_metal
@@ -205,7 +191,7 @@ volScalarField cp
         runTime.timeName(),
         mesh,
         IOobject::NO_READ,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh,
     dimensionedScalar("cp",dimensionSet(0, 2, -2, -1, 0),0.0)
@@ -221,7 +207,7 @@ volScalarField kappa
         runTime.timeName(),
         mesh,
         IOobject::NO_READ,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh,
     dimensionedScalar("kappa",dimensionSet(1, 1, -3, -1, 0),0.0)
@@ -238,7 +224,7 @@ volScalarField TSolidus
         runTime.timeName(),
         mesh,
         IOobject::NO_READ,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh,
     dimensionedScalar("TSolidus",dimensionSet(0, 0, 0, 1, 0),0.0)
@@ -253,7 +239,7 @@ volScalarField TLiquidus
         runTime.timeName(),
         mesh,
         IOobject::NO_READ,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh,
     dimensionedScalar("TLiquidus",dimensionSet(0, 0, 0, 1, 0),1.0)
@@ -268,7 +254,7 @@ volScalarField Tu
         runTime.timeName(),
         mesh,
         IOobject::NO_READ,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     T - TLiquidus
 );
@@ -282,7 +268,7 @@ volScalarField DC
         runTime.timeName(),
         mesh,
         IOobject::READ_IF_PRESENT,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh,
     dimensionedScalar("DC",dimensionSet(1,-3,-1,0,0),1.0e14)
@@ -298,7 +284,7 @@ volVectorField n_filtered
         runTime.timeName(),
         mesh,
         IOobject::READ_IF_PRESENT,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh,
     dimensionedVector("n_filtered",dimensionSet(0, 0, 0, 0, 0),vector::zero)
@@ -327,7 +313,7 @@ volVectorField gradT
         runTime.timeName(),
         mesh,
         IOobject::READ_IF_PRESENT,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh,
     dimensionedVector("gradT",dimensionSet(0, -1, 0, 1, 0),vector::zero)
@@ -341,7 +327,7 @@ volScalarField LatentHeat
         runTime.timeName(),
         mesh,
         IOobject::NO_READ,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh,
     dimensionedScalar("LatentHeat",dimensionSet(0, 2, -2, 0, 0),0.0)
@@ -399,7 +385,7 @@ volScalarField TRHS
         runTime.timeName(),
         mesh,
         IOobject::READ_IF_PRESENT,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh,
     dimensionedScalar("TRHS",dimensionSet(1, -1, -3, 0, 0),scalar(0.0))
@@ -428,7 +414,7 @@ volScalarField beta
         runTime.timeName(),
         mesh,
         IOobject::NO_READ,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh,
     dimensionedScalar("beta",dimensionSet(0, 0, 0, -1, 0),0.0)
@@ -443,7 +429,7 @@ volScalarField rhok
         runTime.timeName(),
         mesh,
         IOobject::NO_READ,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh,
     dimensionedScalar("rhok",dimensionSet(0,0,0,0,0),0.0)
@@ -457,7 +443,7 @@ volScalarField Num_divU
         runTime.timeName(),
         mesh,
         IOobject::NO_READ,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh,
     dimensionedScalar("Num_divU",dimensionSet(0,0,-1,0,0),0.0)
@@ -472,7 +458,7 @@ volVectorField Marangoni
         runTime.timeName(),
         mesh,
         IOobject::READ_IF_PRESENT,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh,
     dimensionedVector("Marangoni",dimensionSet(1, -2, -2, 0, 0),vector::zero)
@@ -486,7 +472,7 @@ volScalarField pVap
         runTime.timeName(),
         mesh,
         IOobject::NO_READ,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh,
     dimensionedScalar("0", dimensionSet(1,-1,-2,0,0,0,0), 0.0)
@@ -500,7 +486,7 @@ volScalarField Qv
         runTime.timeName(),
         mesh,
         IOobject::NO_READ,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh,
     dimensionedScalar("0", dimensionSet(1,0,-3,0,0,0,0), 0.0)
@@ -515,7 +501,7 @@ volScalarField ddte1
         runTime.timeName(),
         mesh,
         IOobject::NO_READ,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh,
     dimensionedScalar("ddte1",dimensionSet(0,0,-1,0,0),0.0),
@@ -562,7 +548,7 @@ volScalarField Ray_Number
         runTime.timeName(),
         mesh,
         IOobject::NO_READ,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh,
     dimensionedScalar("Ray_Number",dimensionSet(0, 0, 0, -0, 0),-1.0)
@@ -576,7 +562,7 @@ volScalarField Deposition
         runTime.timeName(),
         mesh,
         IOobject::NO_READ,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh,
     dimensionedScalar("Deposition",dimensionSet(1, -1, -3, -0, 0),-1.0)
@@ -590,7 +576,7 @@ volScalarField Ray_Q
         runTime.timeName(),
         mesh,
         IOobject::READ_IF_PRESENT,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh,
     dimensionedScalar("Ray_Q",dimensionSet(1, 0, -3, 0, 0),scalar(0.0))
@@ -604,7 +590,7 @@ volScalarField Laser_boundary
         runTime.timeName(),
         mesh,
         IOobject::MUST_READ,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh
 );
@@ -621,7 +607,7 @@ volScalarField alpha_filtered
         runTime.timeName(),
         mesh,
         IOobject::NO_READ,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh,
     dimensionedScalar("alpha_filtered",dimensionSet(0, 0, 0, -0, 0),0.0)
@@ -636,7 +622,7 @@ volScalarField ErrorTrack
         runTime.timeName(),
         mesh,
         IOobject::NO_READ,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh,
     dimensionedScalar("ErrorTrack",dimensionSet(0, 0, 0, -0, 0),0.0)
@@ -650,7 +636,7 @@ volScalarField ErrorTrack2
         runTime.timeName(),
         mesh,
         IOobject::NO_READ,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh,
     dimensionedScalar("ErrorTrack2",dimensionSet(0, 0, 0, -0, 0),0.0)
@@ -665,7 +651,7 @@ volScalarField ErrorTrack2
             runTime.timeName(),
             mesh,
             IOobject::NO_READ,
-            IOobject::AUTO_WRITE
+            IOobject::NO_WRITE
         ),
         mesh,
         dimensionedScalar("GBs",dimensionSet(0, 0, 0, 0, 0),0.0)
@@ -678,7 +664,7 @@ volScalarField ErrorTrack2
             runTime.timeName(),
             mesh,
             IOobject::NO_READ,
-            IOobject::AUTO_WRITE
+            IOobject::NO_WRITE
         ),
         mesh,
         dimensionedScalar("Sum_Phases",dimensionSet(0, 0, 0, 0, 0),0.0)
@@ -695,7 +681,7 @@ volScalarField ErrorTrack2
             runTime.timeName(),
             mesh,
             IOobject::NO_READ,
-            IOobject::AUTO_WRITE
+            IOobject::NO_WRITE
         ),
         mesh,
         dimensionedScalar("Lg",dimensionSet(-1, 1, 1, 0, 0),0.0)
@@ -709,7 +695,7 @@ volScalarField ErrorTrack2
             runTime.timeName(),
             mesh,
             IOobject::NO_READ,
-            IOobject::AUTO_WRITE
+            IOobject::NO_WRITE
         ),
         mesh,
         dimensionedScalar("Lp",dimensionSet(-1, 1, 1, 0, 0),0.0)
@@ -797,7 +783,6 @@ List<bool> niActive (PopBal.size(),true);
                 runTime.timeName(),
                 mesh,
                 IOobject::READ_IF_PRESENT,//IOobject::MUST_READ,
-                // IOobject::AUTO_WRITE
                 IOobject::NO_WRITE
             ),
             mesh,
@@ -815,7 +800,7 @@ volScalarField xi
         runTime.timeName(),
         mesh,
         IOobject::READ_IF_PRESENT,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh,
     dimensionedScalar("xi",dimensionSet(0, 0, 0, 0, 0),0.0),
@@ -858,7 +843,7 @@ volScalarField grainNum
         runTime.timeName(),
         mesh,
         IOobject::READ_IF_PRESENT,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh,
     dimensionedScalar("grainNum",dimensionSet(0, 0, 0, 0, 0),-1.0),
@@ -873,7 +858,7 @@ volScalarField maxNiVal
         runTime.timeName(),
         mesh,
         IOobject::READ_IF_PRESENT,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh,
     dimensionedScalar("maxNiVal",dimensionSet(0, 0, 0, 0, 0),0.0),
@@ -881,10 +866,6 @@ volScalarField maxNiVal
 );
 
 scalar grainNumThreshold( readScalar(PhaseFieldProperties.lookup("grainNumThreshold")));
-
-Switch write_ni_all( PhaseFieldProperties.lookupOrDefault<Switch>("write_ni_all",true) );
-Switch write_ni_active( PhaseFieldProperties.lookupOrDefault<Switch>("write_ni_active",true) );
-
 
 // Set grain num field to indicate which field occupies the cell
 grainNum = -1; // Assume that no grains occupy any cell
@@ -910,7 +891,7 @@ label maxNiIndex(-1);
 forAll(PopBal,i){
     volScalarField& ni = PopBal[i];
     scalar maxVal = gMax(ni);
-    Info << "PopBal[" <<i << "] max = " << maxVal << endl;
+    // Info << "PopBal[" <<i << "] max = " << maxVal << endl;
     if (maxVal > SMALL){ // field is non-zero
         // ni_active[i] = true; // turn on writing of field
         if (i > maxNiIndex)
@@ -933,7 +914,7 @@ volScalarField phi_PF
         runTime.timeName(),
         mesh,
         IOobject::NO_READ,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh,
     dimensionedScalar("phi_PF",dimensionSet(0, 0, 0, 0, 0),0.0)
@@ -947,7 +928,7 @@ volScalarField epsilon1
         runTime.timeName(),
         mesh,
         IOobject::READ_IF_PRESENT,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh,
     dimensionedScalar("epsilon1",dimensionSet(0,0,0,0,0),0.0)
@@ -1101,7 +1082,7 @@ volScalarField qw
         runTime.timeName(),
         mesh,
         IOobject::NO_READ,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh,
     qZero.w()
@@ -1116,7 +1097,7 @@ volVectorField qv
         runTime.timeName(),
         mesh,
         IOobject::NO_READ,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh,
     qZero.v()
@@ -1194,7 +1175,7 @@ volScalarField Aniso_Mob
         runTime.timeName(),
         mesh,
         IOobject::READ_IF_PRESENT,
-        IOobject::AUTO_WRITE
+        IOobject::NO_WRITE
     ),
     mesh,
     dimensionedScalar("Aniso_Mob",dimensionSet(0,0,0,0,0),0.0)

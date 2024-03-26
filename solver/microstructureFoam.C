@@ -77,6 +77,8 @@ int main(int argc, char *argv[])
         #include "setInitialDeltaT.H"
     }
 
+    #   include "readWriteDict.H"
+
     // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
     Info<< "\nStarting time loop\n" << endl;
 
@@ -294,6 +296,19 @@ int main(int argc, char *argv[])
                         PopBal[i].write();
                     }
                 }
+            }
+
+            Info << "Writing volScalarFields for time " << runTime.value() << endl;
+            forAll(volScalarFieldsToWrite,i){
+                Info << "\tWriting field " << volScalarFieldsToWrite[i] << endl;
+                mesh().lookupObject<volScalarField>(volScalarFieldsToWrite[i]).write();
+            }
+            Info << endl;
+
+            Info << "Writing volVectorFields for time " << runTime.value() << endl;
+            forAll(volVectorFieldsToWrite,i){
+                Info << "\tWriting field " << volVectorFieldsToWrite[i] << endl;
+                mesh().lookupObject<volVectorField>(volVectorFieldsToWrite[i]).write();
             }
         }
 

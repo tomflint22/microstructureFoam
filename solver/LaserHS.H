@@ -16,13 +16,18 @@
     const scalar HS_bg(readScalar(LaserProperties.lookup("HS_bg")));
     const scalar HS_velocity(readScalar(LaserProperties.lookup("HS_velocity")));
     const scalar HS_lg(readScalar(LaserProperties.lookup("HS_lg")));
-    const scalar HS_Q(readScalar(LaserProperties.lookup("HS_Q")));
+    scalar HS_Q(readScalar(LaserProperties.lookup("HS_Q")));
     const vector V_incident(LaserProperties.lookup("V_incident"));
 
     const scalar wavelength(readScalar(LaserProperties.lookup("wavelength")));
     const scalar e_num_density(readScalar(LaserProperties.lookup("e_num_density")));
     const scalar elec_resistivity(readScalar(LaserProperties.lookup("elec_resistivity"))); // this is temperature dependent - will include this in future versions
 
+    const scalar powerZeroAfterTime(LaserProperties.lookupOrDefault<scalar>("powerZeroAfterTime",1e20));
+    if (runTime.value() > powerZeroAfterTime)
+    {
+        HS_Q = 0;        
+    }
 
     const dimensionedScalar pi = constant::mathematical::pi;
     const dimensionedScalar a_cond("a_cond",dimensionSet(0, 1, 0, 0, 0),HS_a);
@@ -41,6 +46,7 @@
     const scalar e_i = (damping_frequency/angular_frequency)*((plasma_frequency*plasma_frequency)/((angular_frequency*angular_frequency)+(damping_frequency*damping_frequency)));
     const scalar ref_index = Foam::sqrt((Foam::sqrt((e_r*e_r)+(e_i*e_i))+e_r)/2.0);
     const scalar ext_coefficient = Foam::sqrt((Foam::sqrt((e_r*e_r)+(e_i*e_i))-e_r)/2.0);
+
 
     //needed for cases with spherical particles or spurious currents will smear out the particle interface un-physically
     const Switch PowderSim(LaserProperties.lookupOrDefault<Switch>("PowderSim", false));
